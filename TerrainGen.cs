@@ -115,8 +115,9 @@ public class Cell
         collapsed = false;
     }
 
-    public void Collapse(List<string> validConnections, Sides side)
-    {
+    public bool Collapse(List<string> validConnections, Sides side)
+    { 
+        bool sidesRemoved = false;
         validConnections.Sort();
         foreach (TerrainNode node in possibleNodes)
         {
@@ -124,12 +125,13 @@ public class Cell
 
             if (validConnections.BinarySearch(connection)<0)
             {
+                sidesRemoved = true;
                 possibleNodes.Remove(node);
             }
         }
 
         TestCollapsed();
-        Propagate();
+        return sidesRemoved;
     }
 
     public void CollapseTo(TerrainNode node)
@@ -146,17 +148,11 @@ public class Cell
         });
 
         collapsed = true;
-        Propagate();
     }
 
     public void TestCollapsed()
     {
         collapsed = possibleNodes.Count == 1;
-    }
-
-    public void Propagate()
-    {
-        // TODO: propagate rules to all adjacent Cells
     }
 }
 
@@ -168,7 +164,6 @@ public class TerrainGen
     public TerrainGen()
     {
         CreateNodes();
-        CreateCells();
         Generate();
     }
 
@@ -181,38 +176,12 @@ public class TerrainGen
         // TODO: add more possible nodes
     }
 
-    public void CreateCells()
-    {
-        short x, y, z;
-        for (x = -2; x < 2; x++)
-        {
-            for (y = -2; x < 2; x++)
-            {
-                for (z = -2; x < 2; x++)
-                {
-                    CreateCell(x, y, z);
-                }
-            }
-        }
-    }
-
-    public Cell CreateCell(short x, short y, short z)
-    {
-        Cell cell = FindCell(x, y, z);
-        if (cell != null)
-        {
-            return cell; 
-        }
-        cell = new Cell(x, y, z, nodes);
-        cells.Add(cell);
-        return cell;
-    }
-
     public void Generate()
     {
-        Cell spawnCell = FindCell(0, 0, 0);
+        Cell spawnCell = GetCell(0, 0, 0);
         // x0 y0 z0 is always flat ground as it functions as the spawn
         bool validSpawn = false;
+        bool nodesRemoved = false;
         TerrainNode spawnNode = null;
         Random random = new Random();
 
@@ -238,6 +207,7 @@ public class TerrainGen
             {
                 //remove invalid node so we don't have to check for it again
                 spawnNodes.Remove(spawnNode);
+                nodesRemoved = true;
             }
         }
 
@@ -247,6 +217,8 @@ public class TerrainGen
         }
 
         spawnCell.CollapseTo(spawnNode);
+        if (nodesRemoved)
+            Propagate(spawnCell);
     }
 
     public void Generate(short x, short y, short z)
@@ -254,12 +226,69 @@ public class TerrainGen
         // TODO: Generate specific coords, usually because a player is moving in this direction
     }
 
-    public Cell FindCell(short x, short y, short z)
+    public Cell GetCell(short x, short y, short z)
     {
+        // find if cell exists
         Cell cell = cells.Find(c =>
         {
             return c.x == x && c.y == y && c.z == z;
         });
+        if (cell != null)
+        {
+            // return existing cell
+            return cell;
+        }
+        // create new cell
+        cell = new Cell(x, y, z, nodes);
+        cells.Add(cell);
         return cell;
+    }
+
+    public void Propagate(Cell cell)
+    {
+        Cell targetCell;
+        Sides targetSide;
+
+        //todo: propagate top
+        targetCell = GetCell(cell.x, (short)(cell.y + 1), cell.z);
+        targetSide = Sides.BOTTOM;
+        PropagateSide(cell, targetCell, targetSide);
+
+        //todo: propagate bottom
+        targetCell = GetCell(cell.x, (short)(cell.y - 1), cell.z);
+        targetSide = Sides.TOP;
+        PropagateSide(cell, targetCell, targetSide);
+
+        //todo: propagate north
+        targetCell = GetCell(cell.x, cell.y, (short)(cell.z - 1));
+        targetSide = Sides.SOUTH;
+        PropagateSide(cell, targetCell, targetSide);
+
+        //todo: propagate south
+        targetCell = GetCell(cell.x, cell.y, (short)(cell.z + 1));
+        targetSide = Sides.NORTH;
+        PropagateSide(cell, targetCell, targetSide);
+
+        //todo: propagate east
+        targetCell = GetCell((short)(cell.x + 1), cell.y, cell.z);
+        targetSide = Sides.WEST;
+        PropagateSide(cell, targetCell, targetSide);
+
+        //todo: propagate west
+        targetCell = GetCell((short)(cell.x - 1), cell.y, cell.z);
+        targetSide = Sides.EAST;
+        PropagateSide(cell, targetCell, targetSide);
+
+    }
+
+    public void PropagateSide(Cell rootCell, Cell targetCell, Sides targetSide)
+    {
+        List<String> sides = new List<String>();
+        foreach (TerrainNode node in rootCell.possibleNodes)
+        {
+            sides.Add(node.GetSide(Sides.TOP));
+        }
+        bool nodesRemoved = targetCell.Collapse(sides, targetSide);
+        Propagate(targetCell);
     }
 }
