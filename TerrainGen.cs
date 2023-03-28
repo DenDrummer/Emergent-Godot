@@ -10,7 +10,7 @@ public enum Sides
 
 public class TerrainNode
 {
-    // string of 8 characters indicating the style
+    // 8 characters indicating the style of each corner
     // from East to West, North to South, Top to Bottom:
     //      TNE=0, TNW=1, TSE=2, TSW=3, BNE=4, BNW=5, BSE=6, BSW=7
     // Styles:
@@ -20,9 +20,10 @@ public class TerrainNode
 
     public Mesh mesh;
 
-    public TerrainNode(string corners)
+    public TerrainNode(string corners, Mesh mesh)
     {
         this.corners = corners;
+        this.mesh = mesh;
     }
 
     //flipped values:
@@ -171,10 +172,11 @@ public class TerrainGen
         Generate();
     }
 
+    // TODO: make list assignable from within Godot if possible
     public void CreateNodes()
     {
-        nodes.Add(new TerrainNode("00000000")); // air
-        nodes.Add(new TerrainNode("00001111")); // low poly floor
+        nodes.Add(new TerrainNode("00000000", null)); // air
+        nodes.Add(new TerrainNode("00001111", null)); // low poly floor
 
         // TODO: add more possible nodes
     }
