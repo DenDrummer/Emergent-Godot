@@ -84,7 +84,8 @@ public partial class TerrainGenerator : Node
 
                 default:
                     GD.PrintErr($"{side} is not a known side");
-                    throw new ArgumentException($"{side} is not a known side");
+                    return null;
+                    //throw new ArgumentException($"{side} is not a known side");
             }
 
             for (int i = 0; i< buildString.Length; i++)
@@ -146,7 +147,8 @@ public partial class TerrainGenerator : Node
             if (!nodes.Contains(node))
             {
                 GD.PrintErr($"The \"{node.corners}\" node is not valid for this location");
-                throw new Exception($"The \"{node.corners}\" node is not valid for this location");
+                return;
+                //throw new Exception($"The \"{node.corners}\" node is not valid for this location");
             }
 
             nodes.RemoveAll(n =>
@@ -192,6 +194,17 @@ public partial class TerrainGenerator : Node
         GD.Print("Listing the possible terrain nodes");
         nodes.Add(new TerrainNode("        ", null)); // air
         nodes.Add(new TerrainNode("    0000", null)); // low poly floor
+        nodes.Add(new TerrainNode("  000000", null));
+        nodes.Add(new TerrainNode(" 0 00000", null));
+        nodes.Add(new TerrainNode(" 0000000", null));
+        nodes.Add(new TerrainNode("0 000000", null));
+        nodes.Add(new TerrainNode("00 00000", null));
+        nodes.Add(new TerrainNode("000 0000", null));
+        nodes.Add(new TerrainNode("0000    ", null)); // low poly ceiling
+        nodes.Add(new TerrainNode("0000 000", null));
+        nodes.Add(new TerrainNode("00000 00", null));
+        nodes.Add(new TerrainNode("000000 0", null));
+        nodes.Add(new TerrainNode("0000000 ", null));
         nodes.Add(new TerrainNode("00000000", null)); // solid low poly
         // TODO: add more possible nodes
         // TODO: add meshes
@@ -204,7 +217,7 @@ public partial class TerrainGenerator : Node
         Cell spawnCell = GetCell(0, 0, 0);
         // x0 y0 z0 is always flat ground as it functions as the spawn
         bool validSpawn = false;
-        bool nodesRemoved = false;
+        //bool nodesRemoved = false;
         TerrainNode spawnNode = null;
         Random random = new Random();
 
@@ -228,14 +241,15 @@ public partial class TerrainGenerator : Node
             {
                 // remove invalid node so we don't have to check for it again
                 spawnNodes.Remove(spawnNode);
-                nodesRemoved = true;
+                //nodesRemoved = true;
             }
         }
 
         if (!validSpawn)
         {
             GD.PrintErr("No valid spawn found");
-            throw new Exception("No valid spawn found!");
+            return;
+            //throw new Exception("No valid spawn found!");
         }
 
         spawnCell.CollapseTo(spawnNode);
