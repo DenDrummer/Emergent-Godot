@@ -15,6 +15,11 @@ run/main_scene="res://testlevel_0001.tscn"
 config/features=PackedStringArray("4.0", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 
+[display]
+
+window/handheld/orientation=4
+window/ios/hide_status_bar=false
+
 [dotnet]
 
 project/assembly_name="Emergent"

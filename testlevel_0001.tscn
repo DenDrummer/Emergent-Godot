@@ -1,8 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://dk24f6bgy6pdn"]
+[gd_scene load_steps=2 format=3 uid="uid://uafffbm3a28a"]
 
-[ext_resource type="Script" path="res://TerrainGen.cs" id="1_jubki"]
+[ext_resource type="Script" path="res://Scripts/TerrainGenerator.cs" id="1_wyvc1"]
 
 [node name="testlevel-0001" type="Node3D"]
 
 [node name="TerrainGen" type="Node3D" parent="."]
-script = ExtResource("1_jubki")
+script = ExtResource("1_wyvc1")

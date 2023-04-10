@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "Emergent": {
+      "commandName": "Project",
+      "commandLineArgs": "-e --path C:\\Users\\Jorden\\Documents\\GES\\Emergent",
+      "workingDirectory": "C:\\Users\\Jorden\\Documents\\GES\\Emergent"
+    }
+  }
+}
