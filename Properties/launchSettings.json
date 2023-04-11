@@ -1,9 +1,12 @@
 {
   "profiles": {
-    "Emergent": {
-      "commandName": "Project",
-      "commandLineArgs": "-e --path C:\\Users\\Jorden\\Documents\\GES\\Emergent",
-      "workingDirectory": "C:\\Users\\Jorden\\Documents\\GES\\Emergent"
-    }
+	"Emergent": {
+	  "commandName": "Executable",
+	  "executablePath": "..\\..\\Godot\\Godot_v4.0-stable_mono_win64\\Godot_v4.0-stable_mono_win64.exe",
+	  "commandLineArgs": "--path . --verbose",
+	  "workingDirectory": ".",
+	  "authenticationMode": "None",
+	  "nativeDebugging": true
+	}
   }
 }
