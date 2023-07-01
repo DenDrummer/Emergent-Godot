@@ -6,3 +6,4 @@
 
 [node name="TerrainGen" type="Node3D" parent="."]
 script = ExtResource("1_wyvc1")
+metadata/_edit_lock_ = true
