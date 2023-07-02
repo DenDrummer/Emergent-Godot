@@ -18,8 +18,8 @@ public partial class TerrainGenerator : Node
         // from East to West, North to South, Top to Bottom:
         //      TNE=0, TNW=1, TSE=2, TSW=3, BNE=4, BNW=5, BSE=6, BSW=7
         // Styles:
-        //      ' ' = air
-        //      '0' = low poly aka testmesh
+        //      '0' = air
+        //      '1' = low poly aka testmesh
         public string corners;
         public Mesh mesh;
 
@@ -106,12 +106,13 @@ public partial class TerrainGenerator : Node
     }
 
     public class Cell
-	{
+    {
         // global position in grid
         public readonly short x, y, z;
         public bool collapsed;
         public List<TerrainNode> nodes;
         public short propagationDepth = short.MaxValue;
+        private readonly short scale = 2;
 
         public Cell(short x, short y, short z, List<TerrainNode> nodes)
         {
@@ -126,7 +127,7 @@ public partial class TerrainGenerator : Node
         {
             //GD.Print($"Collapsing cell from the {side.ToString()} with {validConnections.Count} valid connections");
             bool sidesRemoved = false;
-            for(int i = nodes.Count - 1; i >= 0;i--)
+            for (int i = nodes.Count - 1; i >= 0; i--)
             //foreach (TerrainNode node in nodes)
             {
                 string connection = nodes[i].GetSide(side);
@@ -147,12 +148,11 @@ public partial class TerrainGenerator : Node
 
         public void CollapseTo(TerrainNode node)
         {
-            GD.Print($"Collapsing cell to \"{node.corners}\"");
+            GD.Print($"Collapsing ({x},{y},{z}) to \"{node.corners}\"");
             if (!nodes.Contains(node))
             {
                 GD.PrintErr($"The \"{node.corners}\" node is not valid for this location");
                 return;
-                //throw new Exception($"The \"{node.corners}\" node is not valid for this location");
             }
 
             nodes.RemoveAll(n =>
@@ -162,6 +162,7 @@ public partial class TerrainGenerator : Node
 
             collapsed = true;
             propagationDepth = 0;
+            PlaceMesh();
         }
 
         public void TestCollapsed()
@@ -171,15 +172,35 @@ public partial class TerrainGenerator : Node
             {
                 propagationDepth = 0;
                 collapsed = true;
+                PlaceMesh();
             }
             //GD.Print("-> " + (collapsed ? "collapsed" : "not collapsed"));
         }
-	}
+
+        public void PlaceMesh()
+        {
+            // TODO: verify if mesh is placed
+            if (collapsed & nodes[0].mesh != null)
+            {
+                GD.Print($"placing {nodes[0].corners} at ({x},{y},{z})");
+                MeshInstance3D meshInstance = new MeshInstance3D();
+                meshInstance.Mesh = nodes[0].mesh;
+                meshInstance.Position = new Vector3(x*scale, y*scale, z*scale);
+            }
+        }
+    }
     #endregion
+
+    [Export]
+    public short MAX_PROPAGATIONS = 4;
+    // TODO: if possible, export to editor as a single list/array/...
+    [Export]
+    public string[] cornerValues;
+    [Export]
+    public Mesh[] meshes;
 
     List<TerrainNode> nodes = new List<TerrainNode>();
     List<Cell> cells = new List<Cell>();
-    const short MAX_PROPAGATIONS = 4;
 
     public TerrainGenerator()
     {
@@ -190,7 +211,7 @@ public partial class TerrainGenerator : Node
     public override void _Ready()
 	{
         //GD.Print("TerrainGenerator is ready.");
-        CreateNodes();
+        LoadNodes();
         GenerateTerrain();
         //GD.Print("Terrain generated");
 	}
@@ -200,296 +221,17 @@ public partial class TerrainGenerator : Node
 	{
     }
 
-    private void CreateNodes()
+    private void LoadNodes()
     {
-        //GD.Print("Listing the possible terrain nodes");
-        // 0 ground (air)
-        nodes.Add(new TerrainNode("        ", null)); // air
-
-        #region -- 1 ground --
-        // aka outer corners
-        nodes.Add(new TerrainNode("       0", null)); // bottom south east
-        nodes.Add(new TerrainNode("      0 ", null)); // bottom south west
-        nodes.Add(new TerrainNode("     0  ", null)); // bottom north east
-        nodes.Add(new TerrainNode("    0   ", null)); // bottom north west
-        nodes.Add(new TerrainNode("   0    ", null)); // top south east
-        nodes.Add(new TerrainNode("  0     ", null)); // top south west
-        nodes.Add(new TerrainNode(" 0      ", null)); // top north east
-        nodes.Add(new TerrainNode("0       ", null)); // top north west
-        #endregion -- 1 ground --
-
-        #region -- 2 ground --
-        nodes.Add(new TerrainNode("      00", null)); // bottom south edge
-        nodes.Add(new TerrainNode("     0 0", null)); // bottom east edge
-        nodes.Add(new TerrainNode("     00 ", null)); // bottom \
-        nodes.Add(new TerrainNode("    0  0", null)); // bottom /
-        nodes.Add(new TerrainNode("    0 0 ", null)); // bottom west edge
-        nodes.Add(new TerrainNode("    00  ", null)); // bottom north edge
-        nodes.Add(new TerrainNode("   0   0", null)); // south east edge
-        nodes.Add(new TerrainNode("   0  0 ", null)); // south /
-        nodes.Add(new TerrainNode("   0 0  ", null)); // east \
-        nodes.Add(new TerrainNode("   00   ", null));
-        nodes.Add(new TerrainNode("  0    0", null)); // south \
-        nodes.Add(new TerrainNode("  0   0 ", null)); // south west edge
-        nodes.Add(new TerrainNode("  0  0  ", null));
-        nodes.Add(new TerrainNode("  0 0   ", null)); // west /
-        nodes.Add(new TerrainNode("  00    ", null)); // top south edge
-        nodes.Add(new TerrainNode(" 0     0", null)); // east /
-        nodes.Add(new TerrainNode(" 0    0 ", null));
-        nodes.Add(new TerrainNode(" 0   0  ", null)); // north east edge
-        nodes.Add(new TerrainNode(" 0  0   ", null)); // north \
-        nodes.Add(new TerrainNode(" 0 0    ", null)); // top east edge
-        nodes.Add(new TerrainNode(" 00     ", null)); // top /
-        nodes.Add(new TerrainNode("0      0", null));
-        nodes.Add(new TerrainNode("0     0 ", null)); // west \
-        nodes.Add(new TerrainNode("0    0  ", null)); // north /
-        nodes.Add(new TerrainNode("0   0   ", null)); // north west edge
-        nodes.Add(new TerrainNode("0  0    ", null)); // top \
-        nodes.Add(new TerrainNode("0 0     ", null)); // top west edge
-        nodes.Add(new TerrainNode("00      ", null)); // top north edge
-        #endregion -- 2 ground --
-
-        #region -- 3 ground --
-        nodes.Add(new TerrainNode("     000", null));
-        nodes.Add(new TerrainNode("    0 00", null));
-        nodes.Add(new TerrainNode("    00 0", null));
-        nodes.Add(new TerrainNode("    000 ", null));
-        nodes.Add(new TerrainNode("   0  00", null));
-        nodes.Add(new TerrainNode("   0 0 0", null));
-        nodes.Add(new TerrainNode("   0 00 ", null));
-        nodes.Add(new TerrainNode("   00  0", null));
-        nodes.Add(new TerrainNode("   00 0 ", null));
-        nodes.Add(new TerrainNode("   000  ", null));
-        nodes.Add(new TerrainNode("  0   00", null));
-        nodes.Add(new TerrainNode("  0  0 0", null));
-        nodes.Add(new TerrainNode("  0  00 ", null));
-        nodes.Add(new TerrainNode("  0 0  0", null));
-        nodes.Add(new TerrainNode("  0 0 0 ", null));
-        nodes.Add(new TerrainNode("  0 00  ", null));
-        nodes.Add(new TerrainNode("  00   0", null));
-        nodes.Add(new TerrainNode("  00  0 ", null));
-        nodes.Add(new TerrainNode("  00 0  ", null));
-        nodes.Add(new TerrainNode("  000   ", null));
-        nodes.Add(new TerrainNode(" 0    00", null));
-        nodes.Add(new TerrainNode(" 0   0 0", null));
-        nodes.Add(new TerrainNode(" 0   00 ", null));
-        nodes.Add(new TerrainNode(" 0  0  0", null));
-        nodes.Add(new TerrainNode(" 0  0 0 ", null));
-        nodes.Add(new TerrainNode(" 0  00  ", null));
-        nodes.Add(new TerrainNode(" 0 0   0", null));
-        nodes.Add(new TerrainNode(" 0 0  0 ", null));
-        nodes.Add(new TerrainNode(" 0 0 0  ", null));
-        nodes.Add(new TerrainNode(" 0 00   ", null));
-        nodes.Add(new TerrainNode(" 00    0", null));
-        nodes.Add(new TerrainNode(" 00   0 ", null));
-        nodes.Add(new TerrainNode(" 00  0  ", null));
-        nodes.Add(new TerrainNode(" 00 0   ", null));
-        nodes.Add(new TerrainNode(" 000    ", null));
-        nodes.Add(new TerrainNode("0     00", null));
-        nodes.Add(new TerrainNode("0    0 0", null));
-        nodes.Add(new TerrainNode("0    00 ", null));
-        nodes.Add(new TerrainNode("0   0  0", null));
-        nodes.Add(new TerrainNode("0   0 0 ", null));
-        nodes.Add(new TerrainNode("0   00  ", null));
-        nodes.Add(new TerrainNode("0  0   0", null));
-        nodes.Add(new TerrainNode("0  0  0 ", null));
-        nodes.Add(new TerrainNode("0  0 0  ", null));
-        nodes.Add(new TerrainNode("0  00   ", null));
-        nodes.Add(new TerrainNode("0 0    0", null));
-        nodes.Add(new TerrainNode("0 0   0 ", null));
-        nodes.Add(new TerrainNode("0 0  0  ", null));
-        nodes.Add(new TerrainNode("0 0 0   ", null));
-        nodes.Add(new TerrainNode("0 00    ", null));
-        nodes.Add(new TerrainNode("00     0", null));
-        nodes.Add(new TerrainNode("00    0 ", null));
-        nodes.Add(new TerrainNode("00   0  ", null));
-        nodes.Add(new TerrainNode("00  0   ", null));
-        nodes.Add(new TerrainNode("00 0    ", null));
-        nodes.Add(new TerrainNode("000     ", null));
-        #endregion
-
-        #region -- 4 ground --
-        nodes.Add(new TerrainNode("    0000", null)); // bottom
-        nodes.Add(new TerrainNode("   0 000", null));
-        nodes.Add(new TerrainNode("   00 00", null));
-        nodes.Add(new TerrainNode("   000 0", null));
-        nodes.Add(new TerrainNode("   0000 ", null));
-        nodes.Add(new TerrainNode("  0  000", null));
-        nodes.Add(new TerrainNode("  0 0 00", null));
-        nodes.Add(new TerrainNode("  0 00 0", null));
-        nodes.Add(new TerrainNode("  0 000 ", null));
-        nodes.Add(new TerrainNode("  00  00", null)); // south
-        nodes.Add(new TerrainNode("  00 0 0", null));
-        nodes.Add(new TerrainNode("  00 00 ", null));
-        nodes.Add(new TerrainNode("  000  0", null));
-        nodes.Add(new TerrainNode("  000 0 ", null));
-        nodes.Add(new TerrainNode("  0000  ", null));
-        nodes.Add(new TerrainNode(" 0   000", null));
-        nodes.Add(new TerrainNode(" 0  0 00", null));
-        nodes.Add(new TerrainNode(" 0  00 0", null));
-        nodes.Add(new TerrainNode(" 0  000 ", null));
-        nodes.Add(new TerrainNode(" 0 0  00", null));
-        nodes.Add(new TerrainNode(" 0 0 0 0", null)); // east
-        nodes.Add(new TerrainNode(" 0 0 00 ", null));
-        nodes.Add(new TerrainNode(" 0 00  0", null));
-        nodes.Add(new TerrainNode(" 0 00 0 ", null));
-        nodes.Add(new TerrainNode(" 0 000  ", null));
-        nodes.Add(new TerrainNode(" 00   00", null));
-        nodes.Add(new TerrainNode(" 00  0 0", null));
-        nodes.Add(new TerrainNode(" 00  00 ", null));
-        nodes.Add(new TerrainNode(" 00 0  0", null));
-        nodes.Add(new TerrainNode(" 00 0 0 ", null));
-        nodes.Add(new TerrainNode(" 00 00  ", null));
-        nodes.Add(new TerrainNode(" 000   0", null));
-        nodes.Add(new TerrainNode(" 000  0 ", null));
-        nodes.Add(new TerrainNode(" 000 0  ", null));
-        nodes.Add(new TerrainNode(" 0000   ", null));
-        nodes.Add(new TerrainNode("0    000", null));
-        nodes.Add(new TerrainNode("0   0 00", null));
-        nodes.Add(new TerrainNode("0   00 0", null));
-        nodes.Add(new TerrainNode("0   000 ", null));
-        nodes.Add(new TerrainNode("0  0  00", null));
-        nodes.Add(new TerrainNode("0  0 0 0", null));
-        nodes.Add(new TerrainNode("0  0 00 ", null));
-        nodes.Add(new TerrainNode("0  00  0", null));
-        nodes.Add(new TerrainNode("0  00 0 ", null));
-        nodes.Add(new TerrainNode("0  000  ", null));
-        nodes.Add(new TerrainNode("0 0   00", null));
-        nodes.Add(new TerrainNode("0 0  0 0", null));
-        nodes.Add(new TerrainNode("0 0  00 ", null));
-        nodes.Add(new TerrainNode("0 0 0  0", null));
-        nodes.Add(new TerrainNode("0 0 0 0 ", null)); // west
-        nodes.Add(new TerrainNode("0 0 00  ", null));
-        nodes.Add(new TerrainNode("0 00   0", null));
-        nodes.Add(new TerrainNode("0 00  0 ", null));
-        nodes.Add(new TerrainNode("0 00 0  ", null));
-        nodes.Add(new TerrainNode("0 000   ", null));
-        nodes.Add(new TerrainNode("00    00", null));
-        nodes.Add(new TerrainNode("00   0 0", null));
-        nodes.Add(new TerrainNode("00   00 ", null));
-        nodes.Add(new TerrainNode("00  0  0", null));
-        nodes.Add(new TerrainNode("00  0 0 ", null));
-        nodes.Add(new TerrainNode("00  00  ", null)); // north
-        nodes.Add(new TerrainNode("00 0   0", null));
-        nodes.Add(new TerrainNode("00 0  0 ", null));
-        nodes.Add(new TerrainNode("00 0 0  ", null));
-        nodes.Add(new TerrainNode("00 00   ", null));
-        nodes.Add(new TerrainNode("000    0", null));
-        nodes.Add(new TerrainNode("000   0 ", null));
-        nodes.Add(new TerrainNode("000  0  ", null));
-        nodes.Add(new TerrainNode("000 0   ", null));
-        nodes.Add(new TerrainNode("0000    ", null)); // top
-        #endregion -- 4 ground --
-
-        #region -- 5 ground --
-        nodes.Add(new TerrainNode("   00000", null));
-        nodes.Add(new TerrainNode("  0 0000", null));
-        nodes.Add(new TerrainNode("  00 000", null));
-        nodes.Add(new TerrainNode("  000 00", null));
-        nodes.Add(new TerrainNode("  0000 0", null));
-        nodes.Add(new TerrainNode("  00000 ", null));
-        nodes.Add(new TerrainNode(" 0  0000", null));
-        nodes.Add(new TerrainNode(" 0 0 000", null));
-        nodes.Add(new TerrainNode(" 0 00 00", null));
-        nodes.Add(new TerrainNode(" 0 000 0", null));
-        nodes.Add(new TerrainNode(" 0 0000 ", null));
-        nodes.Add(new TerrainNode(" 00  000", null));
-        nodes.Add(new TerrainNode(" 00 0 00", null));
-        nodes.Add(new TerrainNode(" 00 00 0", null));
-        nodes.Add(new TerrainNode(" 00 000 ", null));
-        nodes.Add(new TerrainNode(" 000  00", null));
-        nodes.Add(new TerrainNode(" 000 0 0", null));
-        nodes.Add(new TerrainNode(" 000 00 ", null));
-        nodes.Add(new TerrainNode(" 0000  0", null));
-        nodes.Add(new TerrainNode(" 0000 0 ", null));
-        nodes.Add(new TerrainNode(" 00000  ", null));
-        nodes.Add(new TerrainNode("0   0000", null));
-        nodes.Add(new TerrainNode("0  0 000", null));
-        nodes.Add(new TerrainNode("0  00 00", null));
-        nodes.Add(new TerrainNode("0  000 0", null));
-        nodes.Add(new TerrainNode("0  0000 ", null));
-        nodes.Add(new TerrainNode("0 0  000", null));
-        nodes.Add(new TerrainNode("0 0 0 00", null));
-        nodes.Add(new TerrainNode("0 0 00 0", null));
-        nodes.Add(new TerrainNode("0 0 000 ", null));
-        nodes.Add(new TerrainNode("0 00  00", null));
-        nodes.Add(new TerrainNode("0 00 0 0", null));
-        nodes.Add(new TerrainNode("0 00 00 ", null));
-        nodes.Add(new TerrainNode("0 000  0", null));
-        nodes.Add(new TerrainNode("0 000 0 ", null));
-        nodes.Add(new TerrainNode("0 0000  ", null));
-        nodes.Add(new TerrainNode("00   000", null));
-        nodes.Add(new TerrainNode("00  0 00", null));
-        nodes.Add(new TerrainNode("00  00 0", null));
-        nodes.Add(new TerrainNode("00  000 ", null));
-        nodes.Add(new TerrainNode("00 0  00", null));
-        nodes.Add(new TerrainNode("00 0 0 0", null));
-        nodes.Add(new TerrainNode("00 0 00 ", null));
-        nodes.Add(new TerrainNode("00 00  0", null));
-        nodes.Add(new TerrainNode("00 00 0 ", null));
-        nodes.Add(new TerrainNode("00 000  ", null));
-        nodes.Add(new TerrainNode("000   00", null));
-        nodes.Add(new TerrainNode("000  0 0", null));
-        nodes.Add(new TerrainNode("000  00 ", null));
-        nodes.Add(new TerrainNode("000 0  0", null));
-        nodes.Add(new TerrainNode("000 0 0 ", null));
-        nodes.Add(new TerrainNode("000 00  ", null));
-        nodes.Add(new TerrainNode("0000   0", null));
-        nodes.Add(new TerrainNode("0000  0 ", null));
-        nodes.Add(new TerrainNode("0000 0  ", null));
-        nodes.Add(new TerrainNode("00000   ", null));
-        #endregion -- 5 ground --
-
-        #region -- 6 ground --
-        nodes.Add(new TerrainNode("  000000", null)); // bottom south
-        nodes.Add(new TerrainNode(" 0 00000", null)); // bottom east
-        nodes.Add(new TerrainNode(" 00 0000", null));
-        nodes.Add(new TerrainNode(" 000 000", null)); // south east
-        nodes.Add(new TerrainNode(" 0000 00", null));
-        nodes.Add(new TerrainNode(" 00000 0", null));
-        nodes.Add(new TerrainNode(" 000000 ", null));
-        nodes.Add(new TerrainNode("0  00000", null));
-        nodes.Add(new TerrainNode("0 0 0000", null)); // bottom west
-        nodes.Add(new TerrainNode("0 00 000", null));
-        nodes.Add(new TerrainNode("0 000 00", null));
-        nodes.Add(new TerrainNode("0 0000 0", null));
-        nodes.Add(new TerrainNode("0 00000 ", null));
-        nodes.Add(new TerrainNode("00  0000", null)); // bottom north
-        nodes.Add(new TerrainNode("00 0 000", null));
-        nodes.Add(new TerrainNode("00 00 00", null));
-        nodes.Add(new TerrainNode("00 000 0", null));
-        nodes.Add(new TerrainNode("00 0000 ", null));
-        nodes.Add(new TerrainNode("000  000", null));
-        nodes.Add(new TerrainNode("000 0 00", null));
-        nodes.Add(new TerrainNode("000 00 0", null));
-        nodes.Add(new TerrainNode("000 000 ", null));
-        nodes.Add(new TerrainNode("0000  00", null)); // top south
-        nodes.Add(new TerrainNode("0000 0 0", null)); // top east
-        nodes.Add(new TerrainNode("0000 00 ", null));
-        nodes.Add(new TerrainNode("00000  0", null));
-        nodes.Add(new TerrainNode("00000 0 ", null)); // top west
-        nodes.Add(new TerrainNode("000000  ", null)); // top north
-        #endregion -- 6 ground --
-
-        #region -- 7 ground  --
-        // aka inner corners
-        nodes.Add(new TerrainNode(" 0000000", null));
-        nodes.Add(new TerrainNode("0 000000", null));
-        nodes.Add(new TerrainNode("00 00000", null));
-        nodes.Add(new TerrainNode("000 0000", null));
-        nodes.Add(new TerrainNode("0000 000", null));
-        nodes.Add(new TerrainNode("00000 00", null));
-        nodes.Add(new TerrainNode("000000 0", null));
-        nodes.Add(new TerrainNode("0000000 ", null));
-        #endregion -- 7 ground --
-
-        // 8 ground (solid)
-        nodes.Add(new TerrainNode("00000000", null));
-
-
-        // TODO: add more possible nodes
-        // TODO: add meshes
-        // TODO: assign from Godot or file instead of hardcoded
+        if (cornerValues.Length != meshes.Length)
+        {
+            throw new Exception("Different ammount of cornervalues and meshes (null values allowed)");
+        }
+        for (int i = 0; i < cornerValues.Length; i++)
+        {
+            nodes.Add(new TerrainNode(cornerValues[i], meshes[i]));
+        }
+        GD.Print($"{cornerValues.Length} nodes loaded.");
     }
 
     private void GenerateTerrain()
@@ -511,11 +253,11 @@ public partial class TerrainGenerator : Node
             validSpawn = true;
             spawnNode = spawnNodes[random.Next(spawnNodes.Count)];
 
-            if (!spawnNode.corners.StartsWith("    ") ||
-                spawnNode.corners[4] == ' ' ||
-                spawnNode.corners[5] == ' ' ||
-                spawnNode.corners[6] == ' ' ||
-                spawnNode.corners[7] == ' ')
+            if (!spawnNode.corners.StartsWith("0000") ||
+                spawnNode.corners[4] == '0' ||
+                spawnNode.corners[5] == '0' ||
+                spawnNode.corners[6] == '0' ||
+                spawnNode.corners[7] == '0')
             {
                 validSpawn = false;
             }
