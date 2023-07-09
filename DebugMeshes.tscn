@@ -1,0 +1,44 @@
+[gd_scene load_steps=11 format=3 uid="uid://bowmvhlv6nqrt"]
+
+[ext_resource type="ArrayMesh" uid="uid://cnow201busx4c" path="res://Mesh/Marching Cubes/DebugMeshes/debug-016.obj" id="1_82g4s"]
+[ext_resource type="ArrayMesh" uid="uid://c28pu7aaixgml" path="res://Mesh/Marching Cubes/DebugMeshes/debug-064.obj" id="1_dlv6m"]
+[ext_resource type="ArrayMesh" uid="uid://bm8lm5672d7lu" path="res://Mesh/Marching Cubes/DebugMeshes/debug-032.obj" id="2_qrvg8"]
+[ext_resource type="ArrayMesh" uid="uid://08lnitj855ka" path="res://Mesh/Marching Cubes/DebugMeshes/debug-128.obj" id="2_yy3nr"]
+[ext_resource type="ArrayMesh" uid="uid://dgmd8m3kob3rx" path="res://Mesh/Marching Cubes/DebugMeshes/debug-192.obj" id="3_g6gbk"]
+[ext_resource type="ArrayMesh" uid="uid://be0w4bru0o17e" path="res://Mesh/Marching Cubes/DebugMeshes/debug-096.obj" id="4_6rgn1"]
+[ext_resource type="ArrayMesh" uid="uid://5nwwashqeqre" path="res://Mesh/Marching Cubes/DebugMeshes/debug-080.obj" id="4_mh5jq"]
+[ext_resource type="ArrayMesh" uid="uid://da1tlg1en10xa" path="res://Mesh/Marching Cubes/DebugMeshes/debug-144.obj" id="6_y0fev"]
+[ext_resource type="ArrayMesh" uid="uid://dqertxf2lmiou" path="res://Mesh/Marching Cubes/DebugMeshes/debug-160.obj" id="7_g3r5t"]
+[ext_resource type="ArrayMesh" uid="uid://bg0qwcccqrhcy" path="res://Mesh/Marching Cubes/DebugMeshes/debug-224.obj" id="9_ewdo7"]
+
+[node name="DebugMeshes" type="Node3D"]
+
+[node name="Debug-016" type="MeshInstance3D" parent="."]
+mesh = ExtResource("1_82g4s")
+
+[node name="Debug-032" type="MeshInstance3D" parent="."]
+mesh = ExtResource("2_qrvg8")
+
+[node name="Debug-064" type="MeshInstance3D" parent="."]
+mesh = ExtResource("1_dlv6m")
+
+[node name="Debug-080" type="MeshInstance3D" parent="."]
+mesh = ExtResource("4_mh5jq")
+
+[node name="Debug-096" type="MeshInstance3D" parent="."]
+mesh = ExtResource("4_6rgn1")
+
+[node name="Debug-128" type="MeshInstance3D" parent="."]
+mesh = ExtResource("2_yy3nr")
+
+[node name="Debug-144" type="MeshInstance3D" parent="."]
+mesh = ExtResource("6_y0fev")
+
+[node name="Debug-160" type="MeshInstance3D" parent="."]
+mesh = ExtResource("7_g3r5t")
+
+[node name="Debug-192" type="MeshInstance3D" parent="."]
+mesh = ExtResource("3_g6gbk")
+
+[node name="Debug-224" type="MeshInstance3D" parent="."]
+mesh = ExtResource("9_ewdo7")

@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 
-public partial class TerrainGenerator : Node
+public partial class TerrainGenerator : Node3D
 {
     #region --- classes ---
     public enum NodeSides
@@ -28,7 +28,6 @@ public partial class TerrainGenerator : Node
         {
             this.corners = corners;
             this.mesh = mesh;
-            //GD.Print($"TerrainNode '{corners}' created");
         }
 
         //flipped values:
@@ -41,7 +40,6 @@ public partial class TerrainGenerator : Node
         public static string FlipSide(string connection, NodeSides side)
         {
             bool isVerticalConnection = (side == NodeSides.TOP || side == NodeSides.BOTTOM);
-            //GD.Print($"Flipping side '{connection}' " + (isVerticalConnection ? "vertically" : "horizontally") + "...");
             const string HORIZONTAL_FLIP = "2301";
             const string VERTICAL_FLIP = "1032";
             StringBuilder flippedSide = new StringBuilder();
@@ -49,13 +47,11 @@ public partial class TerrainGenerator : Node
             {
                 flippedSide.Append(connection[Int16.Parse((isVerticalConnection ? VERTICAL_FLIP : HORIZONTAL_FLIP)[i] + "")]);
             }
-            //GD.Print($"-> Flipped side: '{flippedSide}'");
             return flippedSide.ToString();
         }
 
         public string GetSide(NodeSides side)
         {
-            //GD.Print($"Getting the {side.ToString()} side");
             StringBuilder requestedSide = new StringBuilder();
             string buildString;
             switch (side)
@@ -87,7 +83,6 @@ public partial class TerrainGenerator : Node
                 default:
                     GD.PrintErr($"{side} is not a known side");
                     return null;
-                    //throw new ArgumentException($"{side} is not a known side");
             }
 
             for (int i = 0; i < buildString.Length; i++)
@@ -100,7 +95,6 @@ public partial class TerrainGenerator : Node
 
         public bool Connectable(NodeSides mySide, string connection)
         {
-            GD.Print($"Checking if {connection} can connect to this terrain node's {mySide.ToString()}");
             string connector = GetSide(mySide);
             return FlipSide(connection, mySide) == connector;
         }
@@ -113,14 +107,16 @@ public partial class TerrainGenerator : Node
         public bool collapsed;
         public List<TerrainNode> nodes;
         public short propagationDepth = short.MaxValue;
-        private readonly short scale = 2;
+        private readonly short scale = 1;
+        private Node3D scene;
 
-        public Cell(short x, short y, short z, List<TerrainNode> nodes)
+        public Cell(short x, short y, short z, List<TerrainNode> nodes, Node3D scene)
         {
             this.x = x;
             this.y = y;
             this.z = z;
             this.nodes = new List<TerrainNode>(nodes);
+            this.scene = scene;
             //GD.Print($"Terrain cell created at x:{x} y:{y} z:{z}");
         }
 
@@ -149,16 +145,28 @@ public partial class TerrainGenerator : Node
 
         public void CollapseTo(TerrainNode node)
         {
-            GD.Print($"Collapsing ({x},{y},{z}) to \"{node.corners}\"");
             if (!nodes.Contains(node))
             {
-                GD.PrintErr($"The \"{node.corners}\" node is not valid for this location");
+                GD.PrintErr($"The \"{node.corners}\" node is not valid for ({x};{y};{z})");
                 return;
             }
 
             nodes.RemoveAll(n =>
             {
                 return n.corners != node.corners;
+            });
+
+            collapsed = true;
+            propagationDepth = 0;
+            PlaceMesh();
+        }
+
+        public void CollapseRandomly()
+        {
+            int nodeIndex = new Random().Next(0, nodes.Count);
+            nodes.RemoveAll(n =>
+            {
+                return n.corners != nodes[nodeIndex].corners;
             });
 
             collapsed = true;
@@ -181,14 +189,26 @@ public partial class TerrainGenerator : Node
         public void PlaceMesh()
         {
             // TODO: verify if mesh is placed
-            if (collapsed & nodes[0].mesh != null)
+            if (collapsed)
             {
-                GD.Print($"placing {nodes[0].corners} at ({x},{y},{z})");
-                GD.Print($"mesh: {nodes[0].mesh.GetFaces().Length}");
-                MeshInstance3D meshInstance = new MeshInstance3D();
-                meshInstance.Mesh = nodes[0].mesh;
-                meshInstance.Position = new Vector3(x * scale, y * scale, z * scale);
-                GD.Print("mesh placed");
+                if (nodes[0].mesh != null)
+                {
+                    GD.Print($"placing {nodes[0].corners} at ({x * scale},{y * scale},{z * scale})");
+                    GD.Print($"mesh: {nodes[0].mesh.ResourcePath}");
+                    MeshInstance3D meshInstance = new MeshInstance3D();
+                    meshInstance.Mesh = nodes[0].mesh;
+                    meshInstance.Position = new Vector3(x * scale, y * scale, z * scale);
+                    meshInstance.Name = $"({x};{y};{z}){nodes[0].corners}";
+                    scene.AddChild(meshInstance);
+                }
+                else
+                {
+                    GD.PrintErr($"No mesh or placeholder assigned for {nodes[0].corners} !");
+                }
+            }
+            else
+            {
+                GD.PrintErr("Trying to place mesh before collapsing");
             }
         }
     }
@@ -201,6 +221,8 @@ public partial class TerrainGenerator : Node
     public string[] cornerValues;
     [Export]
     public Mesh[] meshes;
+    [Export]
+    public short initialCells = 10;
 
     List<TerrainNode> nodes = new List<TerrainNode>();
     List<Cell> cells = new List<Cell>();
@@ -213,10 +235,8 @@ public partial class TerrainGenerator : Node
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-        //GD.Print("TerrainGenerator is ready.");
         LoadNodes();
-        GenerateTerrain();
-        //GD.Print("Terrain generated");
+        GenerateInitialTerrain();
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -237,19 +257,26 @@ public partial class TerrainGenerator : Node
         GD.Print($"{cornerValues.Length} nodes loaded.");
     }
 
-    private void GenerateTerrain()
+    private void GenerateInitialTerrain()
     {
-        //GD.Print("Generating the initial terrain");
         Cell spawnCell = GetCell(0, 0, 0);
         // x0 y0 z0 is always flat ground as it functions as the spawn
         bool validSpawn = false;
-        //bool nodesRemoved = false;
         TerrainNode spawnNode = null;
         Random random = new Random();
 
         List<TerrainNode> spawnNodes = new List<TerrainNode>(nodes);
         // TODO: filter on spawnNodes and then choose random, making while obsolete
         // .where ? (LINQ)
+
+        spawnNodes.RemoveAll(sn =>
+        {
+            return !sn.corners.StartsWith("0000")
+            || sn.corners[4] == '0'
+            || sn.corners[5] == '0'
+            || sn.corners[6] == '0'
+            || sn.corners[7] == '0';
+        });
 
         while (!validSpawn && spawnNodes.Count > 0)
         {
@@ -282,35 +309,58 @@ public partial class TerrainGenerator : Node
 
         spawnCell.CollapseTo(spawnNode);
         PropagateChanges(spawnCell);
+
+        for (short i = 1; i < initialCells; i++)
+        {
+            GenerateTerrain();
+        }
+    }
+
+    private void GenerateTerrain()
+    {
+        cells.Sort((a, b) => { return a.nodes.Count - b.nodes.Count; });
+        List<Cell> filteredCells = cells.FindAll(c =>
+        {
+            return !c.collapsed;
+        });
+
+        short minStates = (short)filteredCells[0].nodes.Count;
+        filteredCells.RemoveAll(c =>
+        {
+            return  c.propagationDepth != 1;
+        });
+
+        int cellIndex = new Random().Next(0, filteredCells.Count);
+        Cell fc = filteredCells[cellIndex];
+
+        fc.CollapseRandomly();
+        PropagateChanges(fc);
     }
 
     private void GenerateTerrain(short x, short y, short z)
     {
-        // TODO: Generate specific coords, usually because a player is moving in this direction
+        Cell cell = GetCell(x, y, z);
+        cell.CollapseRandomly();
+        PropagateChanges(cell);
     }
 
     public Cell GetCell(short x, short y, short z)
     {
-        //GD.Print($"Finding cell at x:{x} y:{y} z:{z}");
-        // find if cell exists
         Cell cell = cells.Find(c =>
         {
             return c.x == x && c.y == y && c.z == z;
         });
         if (cell != null)
         {
-            //GD.Print("-> Returning existing cell");
             return cell;
         }
-        //GD.Print("-> Creating new cell");
-        cell = new Cell(x, y, z, nodes);
+        cell = new Cell(x, y, z, nodes, this);
         cells.Add(cell);
         return cell;
     }
 
     public void PropagateChanges(Cell rootCell, short propagationDepth = 1)
     {
-        //GD.Print($"Propagating changes from x:{rootCell.x} y:{rootCell.y} z:{rootCell.z} depth:{rootCell.propagationDepth}");
         Cell targetCell;
         NodeSides rootSide, targetSide;
 
@@ -355,7 +405,6 @@ public partial class TerrainGenerator : Node
         Cell targetCell, NodeSides targetSide,
         short propagationDepth)
     {
-        //GD.Print($"Propagating changes to x:{targetCell.x} y:{targetCell.y} z:{targetCell.z}");
         List<string> sides = new List<string>();
         string side;
         foreach (TerrainNode node in rootCell.nodes)
@@ -365,7 +414,15 @@ public partial class TerrainGenerator : Node
             sides.Add(side);
         }
         sides = sides.Distinct().ToList();
-        bool nodesRemoved = targetCell.Collapse(sides, targetSide, propagationDepth);
+        bool nodesRemoved = false;
+        if (!targetCell.collapsed)
+        {
+            nodesRemoved = targetCell.Collapse(sides, targetSide, propagationDepth);
+            if (targetCell.collapsed)
+            {
+                propagationDepth = 0;
+            }
+        }
         if (nodesRemoved && propagationDepth < MAX_PROPAGATIONS)
         {
             propagationDepth++;
