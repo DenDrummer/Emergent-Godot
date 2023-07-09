@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 
@@ -8,11 +9,11 @@ public partial class TerrainGenerator : Node
 {
     #region --- classes ---
     public enum NodeSides
-	{
-		TOP, BOTTOM, NORTH, SOUTH, EAST, WEST
-	}
+    {
+        TOP, BOTTOM, NORTH, SOUTH, EAST, WEST
+    }
 
-	public class TerrainNode
+    public class TerrainNode
     {
         // 8 characters indicating the style of each corner
         // from East to West, North to South, Top to Bottom:
@@ -89,7 +90,7 @@ public partial class TerrainGenerator : Node
                     //throw new ArgumentException($"{side} is not a known side");
             }
 
-            for (int i = 0; i< buildString.Length; i++)
+            for (int i = 0; i < buildString.Length; i++)
             {
                 requestedSide.Append(corners[Int16.Parse($"{buildString[i]}")]);
             }
@@ -183,9 +184,11 @@ public partial class TerrainGenerator : Node
             if (collapsed & nodes[0].mesh != null)
             {
                 GD.Print($"placing {nodes[0].corners} at ({x},{y},{z})");
+                GD.Print($"mesh: {nodes[0].mesh.GetFaces().Length}");
                 MeshInstance3D meshInstance = new MeshInstance3D();
                 meshInstance.Mesh = nodes[0].mesh;
-                meshInstance.Position = new Vector3(x*scale, y*scale, z*scale);
+                meshInstance.Position = new Vector3(x * scale, y * scale, z * scale);
+                GD.Print("mesh placed");
             }
         }
     }
@@ -209,16 +212,16 @@ public partial class TerrainGenerator : Node
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
-	{
+    {
         //GD.Print("TerrainGenerator is ready.");
         LoadNodes();
         GenerateTerrain();
         //GD.Print("Terrain generated");
-	}
+    }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta)
-	{
+    {
     }
 
     private void LoadNodes()
@@ -363,7 +366,7 @@ public partial class TerrainGenerator : Node
         }
         sides = sides.Distinct().ToList();
         bool nodesRemoved = targetCell.Collapse(sides, targetSide, propagationDepth);
-        if (nodesRemoved && propagationDepth<MAX_PROPAGATIONS)
+        if (nodesRemoved && propagationDepth < MAX_PROPAGATIONS)
         {
             propagationDepth++;
             PropagateChanges(targetCell, propagationDepth);
