@@ -22,11 +22,13 @@ public partial class Observer : Node3D
     public override void _Ready()
     {
         Input.MouseMode = Input.MouseModeEnum.Captured;
+        UpdateLabel();
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta)
     {
+        #region --- movement ---
         #region --- longitudal movement ---
         if (Input.IsActionJustPressed("forward"))
         {
@@ -92,8 +94,21 @@ public partial class Observer : Node3D
         if (!moveDirection.IsZeroApprox())
         {
             player.Translate(moveDirection.Normalized() * moveSpeed * (float)GetProcessDeltaTime());
-            coordLabel.Text = $"x: {((int)this.Position.X)}\ny: {(int)this.Position.Y}\nz: {(int)this.Position.Z}";
+            UpdateLabel();
         }
+        #endregion
+
+        #region --- scene ---
+        if (Input.IsActionJustPressed("Escape"))
+        {
+            GetTree().Quit();
+        }
+
+        if (Input.IsActionJustPressed("Restart"))
+        {
+            GetTree().ReloadCurrentScene();
+        }
+        #endregion
     }
 
     public override void _Input(InputEvent @event)
@@ -105,5 +120,11 @@ public partial class Observer : Node3D
             camera.RotateX(-mouseMotion.Relative.Y * xRotationSpeed * (float)GetProcessDeltaTime());
             player.RotateY(-mouseMotion.Relative.X * yRotationSpeed * (float)GetProcessDeltaTime());
         }
+    }
+
+    public void UpdateLabel()
+    {
+        
+        coordLabel.Text = $"x: {MathF.Round(Position.X, 2)}\ny: {MathF.Round(Position.Y, 2)}\nz: {MathF.Round(Position.Z, 2)}";
     }
 }

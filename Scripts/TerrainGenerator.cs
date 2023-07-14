@@ -37,15 +37,32 @@ public partial class TerrainGenerator : Node3D
         //  horizontal:
         //		0 <-> 1
         //		2 <-> 3
-        public static string FlipSide(string connection, NodeSides side)
+        //corner positions when seen from visible side:
+        // 0=TOPLEFT 1=TOPRIGHT 2=BOTTOMLEFT 3=BOTTOMRIGHT
+        public static string FlipSide(string connection, [StringLength(4,MinimumLength =4)] NodeSides side)
         {
             bool isVerticalConnection = (side == NodeSides.TOP || side == NodeSides.BOTTOM);
-            const string VERTICAL_FLIP = "2301";
-            const string HORIZONTAL_FLIP = "1032";
+            const string X_FLIP = "1032";
+            const string Y_FLIP = "2301";
+            const string Z_FLIP = "1032";
             StringBuilder flippedSide = new StringBuilder();
             for (int i = 0; i < 4; i++)
             {
-                flippedSide.Append(connection[Int16.Parse((isVerticalConnection ? VERTICAL_FLIP : HORIZONTAL_FLIP)[i] + "")]);
+                switch (side)
+                {
+                    case NodeSides.TOP:
+                    case NodeSides.BOTTOM:
+                        flippedSide.Append(connection[Int16.Parse($"{Y_FLIP[i]}")]);
+                        break;
+                    case NodeSides.NORTH:
+                    case NodeSides.SOUTH:
+                        flippedSide.Append(connection[Int16.Parse($"{X_FLIP[i]}")]);
+                        break;
+                    case NodeSides.EAST:
+                    case NodeSides.WEST:
+                        flippedSide.Append(connection[Int16.Parse($"{Z_FLIP[i]}")]);
+                        break;
+                };
             }
             return flippedSide.ToString();
         }
@@ -125,7 +142,6 @@ public partial class TerrainGenerator : Node3D
             //GD.Print($"Collapsing cell from the {side.ToString()} with {validConnections.Count} valid connections");
             bool sidesRemoved = false;
             for (int i = nodes.Count - 1; i >= 0; i--)
-            //foreach (TerrainNode node in nodes)
             {
                 string connection = nodes[i].GetSide(side);
 
@@ -193,17 +209,17 @@ public partial class TerrainGenerator : Node3D
             {
                 if (nodes[0].mesh != null)
                 {
-                    GD.Print($"placing {nodes[0].corners} at ({x * scale},{y * scale},{z * scale})");
+                    GD.Print($"placing {nodes[0].corners} at ({z * scale},{y * scale},{-x * scale})");
                     GD.Print($"mesh: {nodes[0].mesh.ResourcePath}");
                     MeshInstance3D meshInstance = new MeshInstance3D();
                     meshInstance.Mesh = nodes[0].mesh;
-                    meshInstance.Position = new Vector3(x * scale, y * scale, z * scale);
-                    meshInstance.Name = $"({x};{y};{z}){nodes[0].corners}";
+                    meshInstance.Position = new Vector3(z * scale, y * scale, -x * scale);
+                    meshInstance.Name = $"({z};{y};{-x}){nodes[0].corners}";
                     scene.AddChild(meshInstance);
                 }
                 else
                 {
-                    GD.PrintErr($"No mesh or placeholder assigned for {nodes[0].corners} !");
+                    GD.PrintErr($"No mesh or placeholder assigned for {nodes[0].corners} ({z * scale},{y * scale},{-x * scale})!");
                 }
             }
             else
@@ -314,7 +330,7 @@ public partial class TerrainGenerator : Node3D
         }
     }
 
-    private async void GenerateTerrain()
+    private void GenerateTerrain()
     {
         cells.Sort((a, b) => { return a.nodes.Count - b.nodes.Count; });
         List<Cell> filteredCells = cells.FindAll(c =>
