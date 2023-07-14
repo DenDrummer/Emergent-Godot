@@ -40,8 +40,8 @@ public partial class TerrainGenerator : Node3D
         public static string FlipSide(string connection, NodeSides side)
         {
             bool isVerticalConnection = (side == NodeSides.TOP || side == NodeSides.BOTTOM);
-            const string HORIZONTAL_FLIP = "2301";
-            const string VERTICAL_FLIP = "1032";
+            const string VERTICAL_FLIP = "2301";
+            const string HORIZONTAL_FLIP = "1032";
             StringBuilder flippedSide = new StringBuilder();
             for (int i = 0; i < 4; i++)
             {
@@ -296,7 +296,6 @@ public partial class TerrainGenerator : Node3D
             {
                 // remove invalid node so we don't have to check for it again
                 spawnNodes.Remove(spawnNode);
-                //nodesRemoved = true;
             }
         }
 
@@ -304,7 +303,6 @@ public partial class TerrainGenerator : Node3D
         {
             GD.PrintErr("No valid spawn found");
             return;
-            //throw new Exception("No valid spawn found!");
         }
 
         spawnCell.CollapseTo(spawnNode);
@@ -316,7 +314,7 @@ public partial class TerrainGenerator : Node3D
         }
     }
 
-    private void GenerateTerrain()
+    private async void GenerateTerrain()
     {
         cells.Sort((a, b) => { return a.nodes.Count - b.nodes.Count; });
         List<Cell> filteredCells = cells.FindAll(c =>
