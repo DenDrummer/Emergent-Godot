@@ -6,4 +6,4 @@ People might appear in multiple lists.
 - **Jorden "Den_drummer" Laureyssens**: sole founding developer of this project; programmer
 
 ## Advice
-- **kroltan** from the Game Dev Hub Discord server: giving great game-dev advice and pointing in the right direction to solve problems.
+- **kroltan** from the Game Dev Network Discord server: giving great game-dev advice and pointing in the right direction to solve problems.
