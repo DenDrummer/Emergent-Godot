@@ -38,15 +38,16 @@
 
 [node name="Player" type="Node3D" parent="." node_paths=PackedStringArray("player", "camera", "coordLabel")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+rotation_order = 0
 script = ExtResource("18_0n6mj")
 moveSpeed = 1.5
-xRotationSpeed = 0.5
-yRotationSpeed = 0.2
+rotationSpeed = Vector3(0.5, 0.5, 1)
 player = NodePath(".")
 camera = NodePath("Camera3D")
 coordLabel = NodePath("Camera3D/HUD/RichTextLabel")
 
 [node name="Camera3D" type="Camera3D" parent="Player"]
+rotation_order = 0
 current = true
 far = 100.0
 

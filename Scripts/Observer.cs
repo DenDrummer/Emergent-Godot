@@ -4,13 +4,11 @@ using System;
 public partial class Observer : Node3D
 {
     // lattitudal, longitudal & vertical
-    short lat, lng, vrt;
+    short lat, lng, vrt, yaw;
     [Export]
     float moveSpeed = 1;
     [Export]
-    float xRotationSpeed = 1;
-    [Export]
-    float yRotationSpeed = 1;
+    Vector3 rotationSpeed = new Vector3(1, 1, 1);
     [Export]
     Node3D player;
     [Export]
@@ -98,13 +96,42 @@ public partial class Observer : Node3D
         }
         #endregion
 
+        #region --- rotation ---
+        if (Input.IsActionJustPressed("clockwise"))
+        {
+            yaw++;
+        }
+        if (Input.IsActionJustReleased("clockwise"))
+        {
+            yaw--;
+        }
+
+        if (Input.IsActionJustPressed("counterclockwise"))
+        {
+            yaw--;
+        }
+        if (Input.IsActionJustReleased("counterclockwise"))
+        {
+            yaw++;
+        }
+
+        if (yaw!=0)
+        {
+            // rotate camera around player's rotation
+            camera.RotateZ(yaw * rotationSpeed.Z * (float)GetProcessDeltaTime());
+            // move rotation from camera to player
+            player.GlobalRotation = camera.GlobalRotation;
+            camera.Rotation = new Vector3();
+        }
+        #endregion
+
         #region --- scene ---
-        if (Input.IsActionJustPressed("Escape"))
+        if (Input.IsActionJustPressed("escape"))
         {
             GetTree().Quit();
         }
 
-        if (Input.IsActionJustPressed("Restart"))
+        if (Input.IsActionJustPressed("restart"))
         {
             GetTree().ReloadCurrentScene();
         }
@@ -116,9 +143,12 @@ public partial class Observer : Node3D
         InputEventMouseMotion mouseMotion = @event as InputEventMouseMotion;
         if (mouseMotion != null)
         {
-            // TODO something something mouseMotion.Relative
-            camera.RotateX(-mouseMotion.Relative.Y * xRotationSpeed * (float)GetProcessDeltaTime());
-            player.RotateY(-mouseMotion.Relative.X * yRotationSpeed * (float)GetProcessDeltaTime());
+            // rotate camera around player's rotation
+            camera.RotateX(-mouseMotion.Relative.Y * rotationSpeed.X * (float)GetProcessDeltaTime());
+            camera.RotateY(-mouseMotion.Relative.X * rotationSpeed.Y * (float)GetProcessDeltaTime());
+            // move rotation from camera to player
+            player.GlobalRotation = camera.GlobalRotation;
+            camera.Rotation = new Vector3();
         }
     }
 
