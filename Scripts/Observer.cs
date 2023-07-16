@@ -4,7 +4,7 @@ using System;
 public partial class Observer : Node3D
 {
     // lattitudal, longitudal & vertical
-    short lat, lng, vrt, yaw;
+    short lat, lng, vrt, yaw, sprint;
     [Export]
     float moveSpeed = 1;
     [Export]
@@ -87,11 +87,27 @@ public partial class Observer : Node3D
         }
         #endregion
 
+        #region --- sprint ---
+        if (Input.IsActionJustPressed("sprint"))
+        {
+            sprint++;
+        }
+        if (Input.IsActionJustReleased("sprint"))
+        {
+            sprint--;
+        }
+        #endregion
+
         Vector3 moveDirection = new Vector3(lat, vrt, lng);
 
         if (!moveDirection.IsZeroApprox())
         {
-            player.Translate(moveDirection.Normalized() * moveSpeed * (float)GetProcessDeltaTime());
+            Vector3 speed = moveDirection.Normalized() * moveSpeed * (float)GetProcessDeltaTime();
+            if (sprint>0)
+            {
+                speed *= 2f;
+            }
+            player.Translate(speed);
             UpdateLabel();
         }
         #endregion
@@ -99,20 +115,20 @@ public partial class Observer : Node3D
         #region --- rotation ---
         if (Input.IsActionJustPressed("clockwise"))
         {
-            yaw++;
+            yaw--;
         }
         if (Input.IsActionJustReleased("clockwise"))
         {
-            yaw--;
+            yaw++;
         }
 
         if (Input.IsActionJustPressed("counterclockwise"))
         {
-            yaw--;
+            yaw++;
         }
         if (Input.IsActionJustReleased("counterclockwise"))
         {
-            yaw++;
+            yaw--;
         }
 
         if (yaw!=0)
