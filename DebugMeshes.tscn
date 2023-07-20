@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=3 uid="uid://bowmvhlv6nqrt"]
+[gd_scene load_steps=40 format=3 uid="uid://bowmvhlv6nqrt"]
 
 [ext_resource type="ArrayMesh" uid="uid://cnow201busx4c" path="res://Mesh/Marching Cubes/DebugMeshes/debug-016.obj" id="1_82g4s"]
 [ext_resource type="ArrayMesh" uid="uid://c28pu7aaixgml" path="res://Mesh/Marching Cubes/DebugMeshes/debug-064.obj" id="1_dlv6m"]
@@ -35,6 +35,10 @@
 [ext_resource type="ArrayMesh" uid="uid://pvyik5ws6bfx" path="res://Mesh/Marching Cubes/DebugMeshes/debug-132.obj" id="33_wuc6r"]
 [ext_resource type="ArrayMesh" uid="uid://b7dbce3vdm7bw" path="res://Mesh/Marching Cubes/DebugMeshes/debug-068.obj" id="34_ejcs3"]
 [ext_resource type="ArrayMesh" uid="uid://co0g2re4lho2y" path="res://Mesh/Marching Cubes/DebugMeshes/debug-196.obj" id="35_2h86b"]
+[ext_resource type="ArrayMesh" uid="uid://buo8a6vhbs4nd" path="res://Mesh/Marching Cubes/DebugMeshes/debug-036.obj" id="36_hb23e"]
+[ext_resource type="ArrayMesh" uid="uid://cdvwsvlcjaqsh" path="res://Mesh/Marching Cubes/DebugMeshes/debug-164.obj" id="37_su4h7"]
+[ext_resource type="ArrayMesh" uid="uid://c6gr5p3oomek7" path="res://Mesh/Marching Cubes/DebugMeshes/debug-100.obj" id="38_6pekr"]
+[ext_resource type="ArrayMesh" uid="uid://dgqybklbkb2k" path="res://Mesh/Marching Cubes/DebugMeshes/debug-228.obj" id="39_2dsfv"]
 
 [node name="DebugMeshes" type="Node3D"]
 
@@ -142,3 +146,15 @@ mesh = ExtResource("34_ejcs3")
 
 [node name="Debug-196" type="MeshInstance3D" parent="."]
 mesh = ExtResource("35_2h86b")
+
+[node name="Debug-036" type="MeshInstance3D" parent="."]
+mesh = ExtResource("36_hb23e")
+
+[node name="Debug-164" type="MeshInstance3D" parent="."]
+mesh = ExtResource("37_su4h7")
+
+[node name="Debug-100" type="MeshInstance3D" parent="."]
+mesh = ExtResource("38_6pekr")
+
+[node name="Debug-228" type="MeshInstance3D" parent="."]
+mesh = ExtResource("39_2dsfv")
