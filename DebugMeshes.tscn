@@ -1,160 +1,320 @@
-[gd_scene load_steps=40 format=3 uid="uid://bowmvhlv6nqrt"]
+[gd_scene load_steps=80 format=3 uid="uid://b8ui6gsbsbce5"]
 
-[ext_resource type="ArrayMesh" uid="uid://cnow201busx4c" path="res://Mesh/Marching Cubes/DebugMeshes/debug-016.obj" id="1_82g4s"]
-[ext_resource type="ArrayMesh" uid="uid://c28pu7aaixgml" path="res://Mesh/Marching Cubes/DebugMeshes/debug-064.obj" id="1_dlv6m"]
-[ext_resource type="ArrayMesh" uid="uid://dm7pl2dw5xykn" path="res://Mesh/Marching Cubes/DebugMeshes/debug-008.obj" id="1_n3n5b"]
-[ext_resource type="ArrayMesh" uid="uid://bm8lm5672d7lu" path="res://Mesh/Marching Cubes/DebugMeshes/debug-032.obj" id="2_qrvg8"]
-[ext_resource type="ArrayMesh" uid="uid://08lnitj855ka" path="res://Mesh/Marching Cubes/DebugMeshes/debug-128.obj" id="2_yy3nr"]
-[ext_resource type="ArrayMesh" uid="uid://drhvydrx15hl" path="res://Mesh/Marching Cubes/DebugMeshes/debug-048.obj" id="3_4flyd"]
-[ext_resource type="ArrayMesh" uid="uid://dgmd8m3kob3rx" path="res://Mesh/Marching Cubes/DebugMeshes/debug-192.obj" id="3_g6gbk"]
-[ext_resource type="ArrayMesh" uid="uid://be0w4bru0o17e" path="res://Mesh/Marching Cubes/DebugMeshes/debug-096.obj" id="4_6rgn1"]
-[ext_resource type="ArrayMesh" uid="uid://5nwwashqeqre" path="res://Mesh/Marching Cubes/DebugMeshes/debug-080.obj" id="4_mh5jq"]
-[ext_resource type="ArrayMesh" uid="uid://yvc1idlvysns" path="res://Mesh/Marching Cubes/DebugMeshes/debug-040.obj" id="4_r3sl0"]
-[ext_resource type="ArrayMesh" uid="uid://da1tlg1en10xa" path="res://Mesh/Marching Cubes/DebugMeshes/debug-144.obj" id="6_y0fev"]
-[ext_resource type="ArrayMesh" uid="uid://dqertxf2lmiou" path="res://Mesh/Marching Cubes/DebugMeshes/debug-160.obj" id="7_g3r5t"]
-[ext_resource type="ArrayMesh" uid="uid://ys3o1dp480kn" path="res://Mesh/Marching Cubes/DebugMeshes/debug-112.obj" id="7_ilok7"]
-[ext_resource type="ArrayMesh" uid="uid://bg0qwcccqrhcy" path="res://Mesh/Marching Cubes/DebugMeshes/debug-224.obj" id="9_ewdo7"]
-[ext_resource type="ArrayMesh" uid="uid://wutqki4ovlbo" path="res://Mesh/Marching Cubes/DebugMeshes/debug-104.obj" id="10_axxfm"]
-[ext_resource type="ArrayMesh" uid="uid://dkr1qyjv6ryb" path="res://Mesh/Marching Cubes/DebugMeshes/debug-176.obj" id="11_q8inf"]
-[ext_resource type="ArrayMesh" uid="uid://cp8eh0vbibwgs" path="res://Mesh/Marching Cubes/DebugMeshes/debug-208.obj" id="13_87ieq"]
-[ext_resource type="ArrayMesh" uid="uid://cy2jje347ejto" path="res://Mesh/Marching Cubes/DebugMeshes/debug-240.obj" id="15_jgbho"]
-[ext_resource type="ArrayMesh" uid="uid://wp8ud211npo7" path="res://Mesh/Marching Cubes/DebugMeshes/debug-200.obj" id="16_w5n3q"]
-[ext_resource type="ArrayMesh" uid="uid://bsmrvw22mf3ig" path="res://Mesh/Marching Cubes/DebugMeshes/debug-136.obj" id="17_y3hs2"]
-[ext_resource type="ArrayMesh" uid="uid://y22dv551irix" path="res://Mesh/Marching Cubes/DebugMeshes/debug-072.obj" id="18_8wet6"]
-[ext_resource type="ArrayMesh" uid="uid://dfu2v8cv71yrh" path="res://Mesh/Marching Cubes/DebugMeshes/debug-168.obj" id="21_w60ch"]
-[ext_resource type="ArrayMesh" uid="uid://rpnspquqvcys" path="res://Mesh/Marching Cubes/DebugMeshes/debug-232.obj" id="22_q506o"]
-[ext_resource type="ArrayMesh" uid="uid://dq5d747ya8idv" path="res://Mesh/Marching Cubes/DebugMeshes/debug-024.obj" id="23_jlk4c"]
-[ext_resource type="ArrayMesh" uid="uid://dlw8mjvmt6oxk" path="res://Mesh/Marching Cubes/DebugMeshes/debug-152.obj" id="25_db8nn"]
-[ext_resource type="ArrayMesh" uid="uid://cnr20vb437w2t" path="res://Mesh/Marching Cubes/DebugMeshes/debug-088.obj" id="26_xgfq1"]
-[ext_resource type="ArrayMesh" uid="uid://brsncjtvxxyi7" path="res://Mesh/Marching Cubes/DebugMeshes/debug-216.obj" id="27_dhopl"]
-[ext_resource type="ArrayMesh" uid="uid://bae5gb8jp6cjn" path="res://Mesh/Marching Cubes/DebugMeshes/debug-056.obj" id="28_nl3cs"]
-[ext_resource type="ArrayMesh" uid="uid://56iv38rj6n2" path="res://Mesh/Marching Cubes/DebugMeshes/debug-184.obj" id="29_yoqv7"]
-[ext_resource type="ArrayMesh" uid="uid://dnlclh6ik4rny" path="res://Mesh/Marching Cubes/DebugMeshes/debug-120.obj" id="30_2c0rc"]
-[ext_resource type="ArrayMesh" uid="uid://b7ia4wx587pg3" path="res://Mesh/Marching Cubes/DebugMeshes/debug-248.obj" id="31_xs46e"]
-[ext_resource type="ArrayMesh" uid="uid://dscd8y24p4hv8" path="res://Mesh/Marching Cubes/DebugMeshes/debug-004.obj" id="32_vjd3h"]
-[ext_resource type="ArrayMesh" uid="uid://pvyik5ws6bfx" path="res://Mesh/Marching Cubes/DebugMeshes/debug-132.obj" id="33_wuc6r"]
-[ext_resource type="ArrayMesh" uid="uid://b7dbce3vdm7bw" path="res://Mesh/Marching Cubes/DebugMeshes/debug-068.obj" id="34_ejcs3"]
-[ext_resource type="ArrayMesh" uid="uid://co0g2re4lho2y" path="res://Mesh/Marching Cubes/DebugMeshes/debug-196.obj" id="35_2h86b"]
-[ext_resource type="ArrayMesh" uid="uid://buo8a6vhbs4nd" path="res://Mesh/Marching Cubes/DebugMeshes/debug-036.obj" id="36_hb23e"]
-[ext_resource type="ArrayMesh" uid="uid://cdvwsvlcjaqsh" path="res://Mesh/Marching Cubes/DebugMeshes/debug-164.obj" id="37_su4h7"]
-[ext_resource type="ArrayMesh" uid="uid://c6gr5p3oomek7" path="res://Mesh/Marching Cubes/DebugMeshes/debug-100.obj" id="38_6pekr"]
-[ext_resource type="ArrayMesh" uid="uid://dgqybklbkb2k" path="res://Mesh/Marching Cubes/DebugMeshes/debug-228.obj" id="39_2dsfv"]
+[ext_resource type="ArrayMesh" uid="uid://d3mr2xtwi54mi" path="res://Mesh/Marching Cubes/DebugMeshes/002-debug.obj" id="1_i8yke"]
+[ext_resource type="ArrayMesh" uid="uid://dscd8y24p4hv8" path="res://Mesh/Marching Cubes/DebugMeshes/004-debug.obj" id="1_ran3h"]
+[ext_resource type="ArrayMesh" uid="uid://dm7pl2dw5xykn" path="res://Mesh/Marching Cubes/DebugMeshes/008-debug.obj" id="2_sn3gs"]
+[ext_resource type="ArrayMesh" uid="uid://c0vuvpfjxiwpq" path="res://Mesh/Marching Cubes/DebugMeshes/006-debug.obj" id="3_3navc"]
+[ext_resource type="ArrayMesh" uid="uid://bw1jjjwp2vgtm" path="res://Mesh/Marching Cubes/DebugMeshes/012-debug.obj" id="3_uepjb"]
+[ext_resource type="ArrayMesh" uid="uid://iif5cr4wd8w" path="res://Mesh/Marching Cubes/DebugMeshes/016-debug.obj" id="4_csne0"]
+[ext_resource type="ArrayMesh" uid="uid://bylsytemiift0" path="res://Mesh/Marching Cubes/DebugMeshes/020-debug.obj" id="5_c5wla"]
+[ext_resource type="ArrayMesh" uid="uid://bcd4uppetmdvt" path="res://Mesh/Marching Cubes/DebugMeshes/010-debug.obj" id="5_whrxe"]
+[ext_resource type="ArrayMesh" uid="uid://ctd6xuba0o0f7" path="res://Mesh/Marching Cubes/DebugMeshes/024-debug.obj" id="6_0q71u"]
+[ext_resource type="ArrayMesh" uid="uid://c6dn38d1trhgp" path="res://Mesh/Marching Cubes/DebugMeshes/028-debug.obj" id="7_hvt5n"]
+[ext_resource type="ArrayMesh" uid="uid://bntotyddldrtt" path="res://Mesh/Marching Cubes/DebugMeshes/014-debug.obj" id="7_m757a"]
+[ext_resource type="ArrayMesh" uid="uid://ch27mg3qeciy2" path="res://Mesh/Marching Cubes/DebugMeshes/032-debug.obj" id="8_82n4q"]
+[ext_resource type="ArrayMesh" uid="uid://4d4b6jnkb26y" path="res://Mesh/Marching Cubes/DebugMeshes/018-debug.obj" id="9_ewknv"]
+[ext_resource type="ArrayMesh" uid="uid://blhgltb14gg83" path="res://Mesh/Marching Cubes/DebugMeshes/036-debug.obj" id="9_n30yw"]
+[ext_resource type="ArrayMesh" uid="uid://cfqcf6etvtj1p" path="res://Mesh/Marching Cubes/DebugMeshes/040-debug.obj" id="10_8mr2r"]
+[ext_resource type="ArrayMesh" uid="uid://brt2rda1h3c8f" path="res://Mesh/Marching Cubes/DebugMeshes/022-debug.obj" id="11_ibf6m"]
+[ext_resource type="ArrayMesh" uid="uid://dmph1ms6ksees" path="res://Mesh/Marching Cubes/DebugMeshes/044-debug.obj" id="11_qox4p"]
+[ext_resource type="ArrayMesh" uid="uid://cekjfb3ewefni" path="res://Mesh/Marching Cubes/DebugMeshes/048-debug.obj" id="12_utcyu"]
+[ext_resource type="ArrayMesh" uid="uid://cfuuvklgq13io" path="res://Mesh/Marching Cubes/DebugMeshes/052-debug.obj" id="13_ti13f"]
+[ext_resource type="ArrayMesh" uid="uid://cmq10ctnb6w44" path="res://Mesh/Marching Cubes/DebugMeshes/026-debug.obj" id="13_y4lvm"]
+[ext_resource type="ArrayMesh" uid="uid://dplnmxkaic6cg" path="res://Mesh/Marching Cubes/DebugMeshes/056-debug.obj" id="14_ty5kn"]
+[ext_resource type="ArrayMesh" uid="uid://j6kq8t1omf57" path="res://Mesh/Marching Cubes/DebugMeshes/030-debug.obj" id="15_dsmvv"]
+[ext_resource type="ArrayMesh" uid="uid://ch4eadfol7bfy" path="res://Mesh/Marching Cubes/DebugMeshes/060-debug.obj" id="15_dwea1"]
+[ext_resource type="ArrayMesh" uid="uid://b1o3wjya6h65p" path="res://Mesh/Marching Cubes/DebugMeshes/064-debug.obj" id="16_oexqg"]
+[ext_resource type="ArrayMesh" uid="uid://c5rfk5tlsyr11" path="res://Mesh/Marching Cubes/DebugMeshes/034-debug.obj" id="17_0auw8"]
+[ext_resource type="ArrayMesh" uid="uid://bgjsgseh67332" path="res://Mesh/Marching Cubes/DebugMeshes/068-debug.obj" id="17_goqko"]
+[ext_resource type="ArrayMesh" uid="uid://btic6vg4fb156" path="res://Mesh/Marching Cubes/DebugMeshes/072-debug.obj" id="18_jpkgx"]
+[ext_resource type="ArrayMesh" uid="uid://cn17t17stw2p2" path="res://Mesh/Marching Cubes/DebugMeshes/076-debug.obj" id="19_ex7tj"]
+[ext_resource type="ArrayMesh" uid="uid://jlxcpkjervbx" path="res://Mesh/Marching Cubes/DebugMeshes/038-debug.obj" id="19_n7y8s"]
+[ext_resource type="ArrayMesh" uid="uid://vk45styuwdoe" path="res://Mesh/Marching Cubes/DebugMeshes/080-debug.obj" id="20_7is46"]
+[ext_resource type="ArrayMesh" uid="uid://d07gcf60i4sgj" path="res://Mesh/Marching Cubes/DebugMeshes/084-debug.obj" id="21_ttpcm"]
+[ext_resource type="ArrayMesh" uid="uid://c74yw0g1j3mf4" path="res://Mesh/Marching Cubes/DebugMeshes/042-debug.obj" id="21_udahf"]
+[ext_resource type="ArrayMesh" uid="uid://dhpfrev6i7de8" path="res://Mesh/Marching Cubes/DebugMeshes/088-debug.obj" id="22_ao04n"]
+[ext_resource type="ArrayMesh" uid="uid://b5kr74lp1qy2n" path="res://Mesh/Marching Cubes/DebugMeshes/046-debug.obj" id="23_5h515"]
+[ext_resource type="ArrayMesh" uid="uid://b5pjknme16e2" path="res://Mesh/Marching Cubes/DebugMeshes/092-debug.obj" id="23_muuwn"]
+[ext_resource type="ArrayMesh" uid="uid://cyyu53spm135o" path="res://Mesh/Marching Cubes/DebugMeshes/096-debug.obj" id="24_ddrke"]
+[ext_resource type="ArrayMesh" uid="uid://dr6y3a7h2ph4o" path="res://Mesh/Marching Cubes/DebugMeshes/050-debug.obj" id="25_2ncdm"]
+[ext_resource type="ArrayMesh" uid="uid://k6bp7om85vd1" path="res://Mesh/Marching Cubes/DebugMeshes/100-debug.obj" id="25_upype"]
+[ext_resource type="ArrayMesh" uid="uid://4p6g6x743kkr" path="res://Mesh/Marching Cubes/DebugMeshes/104-debug.obj" id="26_gae72"]
+[ext_resource type="ArrayMesh" uid="uid://1s6ymvktweop" path="res://Mesh/Marching Cubes/DebugMeshes/108-debug.obj" id="27_qdsv7"]
+[ext_resource type="ArrayMesh" uid="uid://co8whid2kffff" path="res://Mesh/Marching Cubes/DebugMeshes/054-debug.obj" id="27_x8gih"]
+[ext_resource type="ArrayMesh" uid="uid://cfdn8cfsb0oyj" path="res://Mesh/Marching Cubes/DebugMeshes/112-debug.obj" id="28_8ktqw"]
+[ext_resource type="ArrayMesh" uid="uid://b15e3lc72sqq2" path="res://Mesh/Marching Cubes/DebugMeshes/058-debug.obj" id="29_6hhiy"]
+[ext_resource type="ArrayMesh" uid="uid://c0lwpbi0b8kid" path="res://Mesh/Marching Cubes/DebugMeshes/116-debug.obj" id="29_wdj08"]
+[ext_resource type="ArrayMesh" uid="uid://cjoq7vlxdymqi" path="res://Mesh/Marching Cubes/DebugMeshes/120-debug.obj" id="30_k1kd7"]
+[ext_resource type="ArrayMesh" uid="uid://d31e7teqoxrra" path="res://Mesh/Marching Cubes/DebugMeshes/062-debug.obj" id="31_sy5n1"]
+[ext_resource type="ArrayMesh" uid="uid://dmqxe6mfvtum" path="res://Mesh/Marching Cubes/DebugMeshes/124-debug.obj" id="31_uu5dg"]
+[ext_resource type="ArrayMesh" uid="uid://dxx6mjixm2ujl" path="res://Mesh/Marching Cubes/DebugMeshes/128-debug.obj" id="32_gvxcp"]
+[ext_resource type="ArrayMesh" uid="uid://bin10f0vj6ite" path="res://Mesh/Marching Cubes/DebugMeshes/132-debug.obj" id="33_lyt7v"]
+[ext_resource type="ArrayMesh" uid="uid://51rvdiv4wbof" path="res://Mesh/Marching Cubes/DebugMeshes/136-debug.obj" id="34_51f6x"]
+[ext_resource type="ArrayMesh" uid="uid://dkxvx0kylgqen" path="res://Mesh/Marching Cubes/DebugMeshes/140-debug.obj" id="35_jc88x"]
+[ext_resource type="ArrayMesh" uid="uid://bdjjttdk3f6ah" path="res://Mesh/Marching Cubes/DebugMeshes/144-debug.obj" id="36_qey01"]
+[ext_resource type="ArrayMesh" uid="uid://dpgawhrbif8bp" path="res://Mesh/Marching Cubes/DebugMeshes/148-debug.obj" id="37_2s8ec"]
+[ext_resource type="ArrayMesh" uid="uid://dyjogqke3g5b1" path="res://Mesh/Marching Cubes/DebugMeshes/152-debug.obj" id="38_wjf3k"]
+[ext_resource type="ArrayMesh" uid="uid://bmkivbpu80ei1" path="res://Mesh/Marching Cubes/DebugMeshes/156-debug.obj" id="39_db3cm"]
+[ext_resource type="ArrayMesh" uid="uid://0vkoklr0fgma" path="res://Mesh/Marching Cubes/DebugMeshes/160-debug.obj" id="40_726x6"]
+[ext_resource type="ArrayMesh" uid="uid://i7mncgcv2q40" path="res://Mesh/Marching Cubes/DebugMeshes/164-debug.obj" id="41_iue6t"]
+[ext_resource type="ArrayMesh" uid="uid://dmvk4f2vxser8" path="res://Mesh/Marching Cubes/DebugMeshes/168-debug.obj" id="42_cuhf4"]
+[ext_resource type="ArrayMesh" uid="uid://vkikf33h8esp" path="res://Mesh/Marching Cubes/DebugMeshes/172-debug.obj" id="43_3q1rk"]
+[ext_resource type="ArrayMesh" uid="uid://bv4njmewr5bo5" path="res://Mesh/Marching Cubes/DebugMeshes/176-debug.obj" id="44_fkheu"]
+[ext_resource type="ArrayMesh" uid="uid://ch5vfx2mvxkxt" path="res://Mesh/Marching Cubes/DebugMeshes/180-debug.obj" id="45_5opvt"]
+[ext_resource type="ArrayMesh" uid="uid://c1voopktacn7o" path="res://Mesh/Marching Cubes/DebugMeshes/184-debug.obj" id="46_ii4xu"]
+[ext_resource type="ArrayMesh" uid="uid://cqj5xe8xcbfl7" path="res://Mesh/Marching Cubes/DebugMeshes/188-debug.obj" id="47_7f0o6"]
+[ext_resource type="ArrayMesh" uid="uid://ca1krmsfpkha2" path="res://Mesh/Marching Cubes/DebugMeshes/192-debug.obj" id="48_og5wm"]
+[ext_resource type="ArrayMesh" uid="uid://bfa5sbv2gxh2t" path="res://Mesh/Marching Cubes/DebugMeshes/196-debug.obj" id="49_xllqb"]
+[ext_resource type="ArrayMesh" uid="uid://d3uvpfdf7t6ac" path="res://Mesh/Marching Cubes/DebugMeshes/200-debug.obj" id="50_bwgem"]
+[ext_resource type="ArrayMesh" uid="uid://cabgn51vb840v" path="res://Mesh/Marching Cubes/DebugMeshes/204-debug.obj" id="51_v7yns"]
+[ext_resource type="ArrayMesh" uid="uid://tdrr4fwy6bo8" path="res://Mesh/Marching Cubes/DebugMeshes/208-debug.obj" id="52_j63mt"]
+[ext_resource type="ArrayMesh" uid="uid://r7ulrlvpy3h7" path="res://Mesh/Marching Cubes/DebugMeshes/212-debug.obj" id="53_ukf7p"]
+[ext_resource type="ArrayMesh" uid="uid://bsit0yecqtaf5" path="res://Mesh/Marching Cubes/DebugMeshes/216-debug.obj" id="54_5ykq1"]
+[ext_resource type="ArrayMesh" uid="uid://bxnvajyf08qt2" path="res://Mesh/Marching Cubes/DebugMeshes/220-debug.obj" id="55_ufxdf"]
+[ext_resource type="ArrayMesh" uid="uid://4kqscgmp88d6" path="res://Mesh/Marching Cubes/DebugMeshes/224-debug.obj" id="56_8djgd"]
+[ext_resource type="ArrayMesh" uid="uid://brmmit13o5h66" path="res://Mesh/Marching Cubes/DebugMeshes/228-debug.obj" id="57_wnvl7"]
+[ext_resource type="ArrayMesh" uid="uid://de1j4r2t34fjr" path="res://Mesh/Marching Cubes/DebugMeshes/232-debug.obj" id="58_2yw0d"]
+[ext_resource type="ArrayMesh" uid="uid://cahh3uuid6vtq" path="res://Mesh/Marching Cubes/DebugMeshes/236-debug.obj" id="59_n1rqw"]
+[ext_resource type="ArrayMesh" uid="uid://dvg3d380eiogn" path="res://Mesh/Marching Cubes/DebugMeshes/240-debug.obj" id="60_rscv8"]
+[ext_resource type="ArrayMesh" uid="uid://c1r0bmc1uvyrm" path="res://Mesh/Marching Cubes/DebugMeshes/244-debug.obj" id="61_fvdvb"]
+[ext_resource type="ArrayMesh" uid="uid://bqkslb2tcvq2j" path="res://Mesh/Marching Cubes/DebugMeshes/248-debug.obj" id="62_bgvy7"]
+[ext_resource type="ArrayMesh" uid="uid://cusxmky26yp84" path="res://Mesh/Marching Cubes/DebugMeshes/252-debug.obj" id="63_sqgj2"]
 
 [node name="DebugMeshes" type="Node3D"]
 
-[node name="Debug-128" type="MeshInstance3D" parent="."]
-mesh = ExtResource("2_yy3nr")
+[node name="002-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("1_i8yke")
 
-[node name="Debug-064" type="MeshInstance3D" parent="."]
-mesh = ExtResource("1_dlv6m")
+[node name="004-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("1_ran3h")
 
-[node name="Debug-192" type="MeshInstance3D" parent="."]
-mesh = ExtResource("3_g6gbk")
+[node name="006-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("3_3navc")
 
-[node name="Debug-032" type="MeshInstance3D" parent="."]
-mesh = ExtResource("2_qrvg8")
+[node name="008-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("2_sn3gs")
 
-[node name="Debug-160" type="MeshInstance3D" parent="."]
-mesh = ExtResource("7_g3r5t")
+[node name="010-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("5_whrxe")
 
-[node name="Debug-096" type="MeshInstance3D" parent="."]
-mesh = ExtResource("4_6rgn1")
+[node name="012-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("3_uepjb")
 
-[node name="Debug-224" type="MeshInstance3D" parent="."]
-mesh = ExtResource("9_ewdo7")
+[node name="014-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("7_m757a")
 
-[node name="Debug-016" type="MeshInstance3D" parent="."]
-mesh = ExtResource("1_82g4s")
+[node name="016-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("4_csne0")
 
-[node name="Debug-144" type="MeshInstance3D" parent="."]
-mesh = ExtResource("6_y0fev")
+[node name="018-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("9_ewknv")
 
-[node name="Debug-080" type="MeshInstance3D" parent="."]
-mesh = ExtResource("4_mh5jq")
+[node name="020-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("5_c5wla")
 
-[node name="Debug-208" type="MeshInstance3D" parent="."]
-mesh = ExtResource("13_87ieq")
+[node name="022-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("11_ibf6m")
 
-[node name="Debug-048" type="MeshInstance3D" parent="."]
-mesh = ExtResource("3_4flyd")
+[node name="024-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("6_0q71u")
 
-[node name="Debug-176" type="MeshInstance3D" parent="."]
-mesh = ExtResource("11_q8inf")
+[node name="026-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("13_y4lvm")
 
-[node name="Debug-112" type="MeshInstance3D" parent="."]
-mesh = ExtResource("7_ilok7")
+[node name="028-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("7_hvt5n")
 
-[node name="Debug-240" type="MeshInstance3D" parent="."]
-mesh = ExtResource("15_jgbho")
+[node name="030-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("15_dsmvv")
 
-[node name="Debug-008" type="MeshInstance3D" parent="."]
-mesh = ExtResource("1_n3n5b")
+[node name="032-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("8_82n4q")
 
-[node name="Debug-136" type="MeshInstance3D" parent="."]
-mesh = ExtResource("17_y3hs2")
+[node name="034-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("17_0auw8")
 
-[node name="Debug-072" type="MeshInstance3D" parent="."]
-mesh = ExtResource("18_8wet6")
+[node name="036-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("9_n30yw")
 
-[node name="Debug-200" type="MeshInstance3D" parent="."]
-mesh = ExtResource("16_w5n3q")
+[node name="038-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("19_n7y8s")
 
-[node name="Debug-040" type="MeshInstance3D" parent="."]
-mesh = ExtResource("4_r3sl0")
+[node name="040-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("10_8mr2r")
 
-[node name="Debug-168" type="MeshInstance3D" parent="."]
-mesh = ExtResource("21_w60ch")
+[node name="042-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("21_udahf")
 
-[node name="Debug-104" type="MeshInstance3D" parent="."]
-mesh = ExtResource("10_axxfm")
+[node name="044-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("11_qox4p")
 
-[node name="Debug-232" type="MeshInstance3D" parent="."]
-mesh = ExtResource("22_q506o")
+[node name="046-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("23_5h515")
 
-[node name="Debug-024" type="MeshInstance3D" parent="."]
-mesh = ExtResource("23_jlk4c")
+[node name="048-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("12_utcyu")
 
-[node name="Debug-152" type="MeshInstance3D" parent="."]
-mesh = ExtResource("25_db8nn")
+[node name="050-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("25_2ncdm")
 
-[node name="Debug-088" type="MeshInstance3D" parent="."]
-mesh = ExtResource("26_xgfq1")
+[node name="052-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("13_ti13f")
 
-[node name="Debug-216" type="MeshInstance3D" parent="."]
-mesh = ExtResource("27_dhopl")
+[node name="054-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("27_x8gih")
 
-[node name="Debug-056" type="MeshInstance3D" parent="."]
-mesh = ExtResource("28_nl3cs")
+[node name="056-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("14_ty5kn")
 
-[node name="Debug-184" type="MeshInstance3D" parent="."]
-mesh = ExtResource("29_yoqv7")
+[node name="058-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("29_6hhiy")
 
-[node name="Debug-120" type="MeshInstance3D" parent="."]
-mesh = ExtResource("30_2c0rc")
+[node name="060-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("15_dwea1")
 
-[node name="Debug-248" type="MeshInstance3D" parent="."]
-mesh = ExtResource("31_xs46e")
+[node name="062-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("31_sy5n1")
 
-[node name="Debug-004" type="MeshInstance3D" parent="."]
-mesh = ExtResource("32_vjd3h")
+[node name="064-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("16_oexqg")
 
-[node name="Debug-132" type="MeshInstance3D" parent="."]
-mesh = ExtResource("33_wuc6r")
+[node name="068-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("17_goqko")
 
-[node name="Debug-068" type="MeshInstance3D" parent="."]
-mesh = ExtResource("34_ejcs3")
+[node name="072-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("18_jpkgx")
 
-[node name="Debug-196" type="MeshInstance3D" parent="."]
-mesh = ExtResource("35_2h86b")
+[node name="076-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("19_ex7tj")
 
-[node name="Debug-036" type="MeshInstance3D" parent="."]
-mesh = ExtResource("36_hb23e")
+[node name="080-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("20_7is46")
 
-[node name="Debug-164" type="MeshInstance3D" parent="."]
-mesh = ExtResource("37_su4h7")
+[node name="084-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("21_ttpcm")
 
-[node name="Debug-100" type="MeshInstance3D" parent="."]
-mesh = ExtResource("38_6pekr")
+[node name="088-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("22_ao04n")
 
-[node name="Debug-228" type="MeshInstance3D" parent="."]
-mesh = ExtResource("39_2dsfv")
+[node name="092-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("23_muuwn")
+
+[node name="096-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("24_ddrke")
+
+[node name="100-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("25_upype")
+
+[node name="104-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("26_gae72")
+
+[node name="108-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("27_qdsv7")
+
+[node name="112-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("28_8ktqw")
+
+[node name="116-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("29_wdj08")
+
+[node name="120-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("30_k1kd7")
+
+[node name="124-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("31_uu5dg")
+
+[node name="128-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("32_gvxcp")
+
+[node name="132-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("33_lyt7v")
+
+[node name="136-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("34_51f6x")
+
+[node name="140-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("35_jc88x")
+
+[node name="144-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("36_qey01")
+
+[node name="148-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("37_2s8ec")
+
+[node name="152-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("38_wjf3k")
+
+[node name="156-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("39_db3cm")
+
+[node name="160-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("40_726x6")
+
+[node name="164-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("41_iue6t")
+
+[node name="168-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("42_cuhf4")
+
+[node name="172-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("43_3q1rk")
+
+[node name="176-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("44_fkheu")
+
+[node name="180-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("45_5opvt")
+
+[node name="184-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("46_ii4xu")
+
+[node name="188-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("47_7f0o6")
+
+[node name="192-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("48_og5wm")
+
+[node name="196-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("49_xllqb")
+
+[node name="200-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("50_bwgem")
+
+[node name="204-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("51_v7yns")
+
+[node name="208-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("52_j63mt")
+
+[node name="212-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("53_ukf7p")
+
+[node name="216-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("54_5ykq1")
+
+[node name="220-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("55_ufxdf")
+
+[node name="224-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("56_8djgd")
+
+[node name="228-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("57_wnvl7")
+
+[node name="232-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("58_2yw0d")
+
+[node name="236-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("59_n1rqw")
+
+[node name="240-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("60_rscv8")
+
+[node name="244-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("61_fvdvb")
+
+[node name="248-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("62_bgvy7")
+
+[node name="252-debug" type="MeshInstance3D" parent="."]
+mesh = ExtResource("63_sqgj2")

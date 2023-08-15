@@ -124,7 +124,7 @@ public partial class TerrainGenerator : Node3D
         public bool collapsed;
         public List<TerrainNode> nodes;
         public short propagationDepth = short.MaxValue;
-        private readonly short scale = 1;
+        private readonly short scale = 2;
         private Node3D scene;
 
         public Cell(short x, short y, short z, List<TerrainNode> nodes, Node3D scene)

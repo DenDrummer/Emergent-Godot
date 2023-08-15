@@ -1,0 +1,21 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://51rvdiv4wbof"
+path="res://.godot/imported/136-debug.obj-83d73917cd77d898db988f053f75013b.mesh"
+
+[deps]
+
+files=["res://.godot/imported/136-debug.obj-83d73917cd77d898db988f053f75013b.mesh"]
+
+source_file="res://Mesh/Marching Cubes/DebugMeshes/136-debug.obj"
+dest_files=["res://.godot/imported/136-debug.obj-83d73917cd77d898db988f053f75013b.mesh", "res://.godot/imported/136-debug.obj-83d73917cd77d898db988f053f75013b.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true

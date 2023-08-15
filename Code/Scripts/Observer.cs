@@ -4,7 +4,7 @@ using System;
 public partial class Observer : Node3D
 {
     // lattitudal, longitudal & vertical
-    short lat, lng, vrt, yaw, sprint;
+    short lat, lng, vrt, yaw, sprint, rotReset;
     [Export]
     float moveSpeed = 1;
     [Export]
@@ -103,7 +103,7 @@ public partial class Observer : Node3D
         if (!moveDirection.IsZeroApprox())
         {
             Vector3 speed = moveDirection.Normalized() * moveSpeed * (float)GetProcessDeltaTime();
-            if (sprint>0)
+            if (sprint > 0)
             {
                 speed *= 2f;
             }
@@ -131,7 +131,34 @@ public partial class Observer : Node3D
             yaw--;
         }
 
-        if (yaw!=0)
+        if (Input.IsActionJustPressed("reset-rotation"))
+        {
+            rotReset++;
+        }
+        if (Input.IsActionJustReleased("reset-rotation"))
+        {
+            rotReset--;
+        }
+
+        if (rotReset > 0)
+        {
+            Vector3 targetRotation = player.GlobalRotation;// - new Vector3(0, player.GlobalRotation.Y, 0);
+            Vector3 maxRotation = rotationSpeed * (float)GetProcessDeltaTime();
+            Vector3 lerpedRotation = new Vector3(
+                Mathf.LerpAngle(targetRotation.X, 0f, 1f - Mathf.Abs(targetRotation.Normalized().X)),
+                Mathf.LerpAngle(targetRotation.Y, 0f, 1f - Mathf.Abs(targetRotation.Normalized().Y)),
+                Mathf.LerpAngle(targetRotation.Z, 0f, 1f - Mathf.Abs(targetRotation.Normalized().Z)));
+            //Mathf.l
+            //player.GlobalRotation -= new Vector3(
+            //    ClampRotation(targetRotation.X, maxRotation.Z),
+            //    ClampRotation(targetRotation.Y, maxRotation.Z),
+            //    ClampRotation(targetRotation.Z, maxRotation.Z));
+            player.GlobalRotation -= new Vector3(
+                ClampRotation(lerpedRotation.X, maxRotation.Z),
+                ClampRotation(lerpedRotation.Y, maxRotation.Z),
+                ClampRotation(lerpedRotation.Z, maxRotation.Z));
+        }
+        else if (yaw != 0)
         {
             // rotate camera around player's rotation
             camera.RotateZ(yaw * rotationSpeed.Z * (float)GetProcessDeltaTime());
@@ -172,5 +199,11 @@ public partial class Observer : Node3D
     {
         
         coordLabel.Text = $"x: {MathF.Round(Position.X, 2)}\ny: {MathF.Round(Position.Y, 2)}\nz: {MathF.Round(Position.Z, 2)}";
+    }
+
+    private float ClampRotation(float angle, float limit)
+    {
+        return Mathf.Clamp(angle, -limit, limit);
+
     }
 }
