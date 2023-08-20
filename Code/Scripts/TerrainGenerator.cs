@@ -211,10 +211,13 @@ public partial class TerrainGenerator : Node3D
                 {
                     GD.Print($"placing {nodes[0].corners} at ({z * scale},{y * scale},{-x * scale})");
                     GD.Print($"mesh: {nodes[0].mesh.ResourcePath}");
+                    //StaticBody3D staticBody3D = new StaticBody3D();
                     MeshInstance3D meshInstance = new MeshInstance3D();
                     meshInstance.Mesh = nodes[0].mesh;
                     meshInstance.Position = new Vector3(z * scale, y * scale, -x * scale);
                     meshInstance.Name = $"({z};{y};{-x}){nodes[0].corners}";
+                    //staticBody3D.AddChild(meshInstance);
+                    //scene.AddChild(staticBody3D);
                     scene.AddChild(meshInstance);
                 }
                 else
@@ -239,6 +242,8 @@ public partial class TerrainGenerator : Node3D
     public Mesh[] meshes;
     [Export]
     public short initialCells = 10;
+    [Export]
+    public short cellsPerTick = 10;
 
     List<TerrainNode> nodes = new List<TerrainNode>();
     List<Cell> cells = new List<Cell>();
@@ -258,6 +263,11 @@ public partial class TerrainGenerator : Node3D
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta)
     {
+        for (int i = 0; i < Mathf.Min(initialCells, cellsPerTick); i++)
+        {
+            initialCells--;
+            GenerateTerrain();
+        }
     }
 
     private void LoadNodes()
@@ -323,11 +333,6 @@ public partial class TerrainGenerator : Node3D
 
         spawnCell.CollapseTo(spawnNode);
         PropagateChanges(spawnCell);
-
-        for (short i = 1; i < initialCells; i++)
-        {
-            GenerateTerrain();
-        }
     }
 
     private void GenerateTerrain()
