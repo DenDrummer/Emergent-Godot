@@ -15,6 +15,8 @@ public partial class Observer : Node3D
     Node3D camera;
     [Export]
     RichTextLabel coordLabel;
+    [Export]
+    TerrainGenerator TerrainGenerator;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
@@ -178,6 +180,21 @@ public partial class Observer : Node3D
         {
             GetTree().ReloadCurrentScene();
         }
+
+        if (Input.IsActionJustPressed("generate"))
+        {
+            for (int i = 0; i < 100; i++)
+            {
+                TerrainGenerator.GenerateTerrain((short)player.GlobalPosition.X, (short)player.GlobalPosition.Y, (short)player.GlobalPosition.Z);
+            }
+        }
+        #endregion
+
+        #region --- UI ---
+        //if (Input.IsActionJustPressed("fullscreen"))
+        //{
+        //    Godot.
+        //}
         #endregion
     }
 

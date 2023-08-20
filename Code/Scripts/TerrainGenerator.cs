@@ -120,18 +120,18 @@ public partial class TerrainGenerator : Node3D
     public class Cell
     {
         // global position in grid
-        public readonly short x, y, z;
+        public readonly short x, y, z, scale;
         public bool collapsed;
         public List<TerrainNode> nodes;
         public short propagationDepth = short.MaxValue;
-        private readonly short scale = 2;
         private Node3D scene;
 
-        public Cell(short x, short y, short z, List<TerrainNode> nodes, Node3D scene)
+        public Cell(short x, short y, short z, short scale, List<TerrainNode> nodes, Node3D scene)
         {
             this.x = x;
             this.y = y;
             this.z = z;
+            this.scale = scale;
             this.nodes = new List<TerrainNode>(nodes);
             this.scene = scene;
             //GD.Print($"Terrain cell created at x:{x} y:{y} z:{z}");
@@ -211,13 +211,11 @@ public partial class TerrainGenerator : Node3D
                 {
                     GD.Print($"placing {nodes[0].corners} at ({z * scale},{y * scale},{-x * scale})");
                     GD.Print($"mesh: {nodes[0].mesh.ResourcePath}");
-                    //StaticBody3D staticBody3D = new StaticBody3D();
                     MeshInstance3D meshInstance = new MeshInstance3D();
                     meshInstance.Mesh = nodes[0].mesh;
                     meshInstance.Position = new Vector3(z * scale, y * scale, -x * scale);
                     meshInstance.Name = $"({z};{y};{-x}){nodes[0].corners}";
-                    //staticBody3D.AddChild(meshInstance);
-                    //scene.AddChild(staticBody3D);
+                    meshInstance.CreateTrimeshCollision();
                     scene.AddChild(meshInstance);
                 }
                 else
@@ -244,6 +242,8 @@ public partial class TerrainGenerator : Node3D
     public short initialCells = 10;
     [Export]
     public short cellsPerTick = 10;
+    [Export]
+    public short gridScale = 2;
 
     List<TerrainNode> nodes = new List<TerrainNode>();
     List<Cell> cells = new List<Cell>();
@@ -335,32 +335,55 @@ public partial class TerrainGenerator : Node3D
         PropagateChanges(spawnCell);
     }
 
-    private void GenerateTerrain()
+    public void GenerateTerrain()
     {
-        cells.Sort((a, b) => { return a.nodes.Count - b.nodes.Count; });
-        List<Cell> filteredCells = cells.FindAll(c =>
+        List<Cell> filteredCells = cells.FindAll(c => !c.collapsed);
+
+        GenerateTerrain(filteredCells);
+    }
+
+    public void GenerateTerrain(short x, short y, short z)
+    {
+        float scaledX = -z / gridScale;
+        float scaledY = y / gridScale;
+        float scaledZ = x / gridScale;
+        List<Cell> filteredCells = cells.FindAll(c => !c.collapsed);
+        filteredCells.Sort((a, b) =>
         {
-            return !c.collapsed;
+            float aDelta = Mathf.Sqrt(Mathf.Pow(a.x - scaledX, 2) + Mathf.Pow(a.y - scaledY, 2) + Mathf.Pow(a.z - scaledZ, 2));
+            float bDelta = Mathf.Sqrt(Mathf.Pow(b.x - scaledX, 2) + Mathf.Pow(b.y - scaledY, 2) + Mathf.Pow(b.z - scaledZ, 2));
+            float distanceDelta = aDelta - bDelta;
+
+            if (distanceDelta > 0) return 1;
+            if (distanceDelta < 0) return -1;
+            return 0;
         });
 
-        short minStates = (short)filteredCells[0].nodes.Count;
+        float delta = Mathf.Sqrt(Mathf.Pow(filteredCells[0].x - scaledX, 2) + Mathf.Pow(filteredCells[0].y - scaledY, 2) + Mathf.Pow(filteredCells[0].z - scaledZ, 2));
         filteredCells.RemoveAll(c =>
         {
-            return  c.propagationDepth != 1;
+            float cDelta = Mathf.Sqrt(Mathf.Pow(c.x - scaledX, 2) + Mathf.Pow(c.y - scaledY, 2) + Mathf.Pow(c.z - scaledZ, 2));
+            return cDelta > delta;
         });
+
+        GenerateTerrain(filteredCells);
+    }
+
+    private void GenerateTerrain(List<Cell> filteredCells)
+    {
+        filteredCells.Sort((a, b) => a.nodes.Count - b.nodes.Count);
+        short minStates = (short)filteredCells[0].nodes.Count;
+        filteredCells.RemoveAll(c => c.nodes.Count > minStates);
+
+        filteredCells.Sort((a, b) => a.propagationDepth - b.propagationDepth);
+        short minPropagationDepth = filteredCells[0].propagationDepth;
+        filteredCells.RemoveAll(c => c.propagationDepth > minPropagationDepth);
 
         int cellIndex = new Random().Next(0, filteredCells.Count);
         Cell fc = filteredCells[cellIndex];
 
         fc.CollapseRandomly();
         PropagateChanges(fc);
-    }
-
-    private void GenerateTerrain(short x, short y, short z)
-    {
-        Cell cell = GetCell(x, y, z);
-        cell.CollapseRandomly();
-        PropagateChanges(cell);
     }
 
     public Cell GetCell(short x, short y, short z)
@@ -373,7 +396,7 @@ public partial class TerrainGenerator : Node3D
         {
             return cell;
         }
-        cell = new Cell(x, y, z, nodes, this);
+        cell = new Cell(x, y, z, gridScale, nodes, this);
         cells.Add(cell);
         return cell;
     }
