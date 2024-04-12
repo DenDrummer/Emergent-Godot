@@ -1,0 +1,11 @@
+[gd_resource type="Resource" load_steps=3 format=3 uid="uid://r3onhfot4oua"]
+
+[ext_resource type="Script" path="res://Code/Resources/TerrainNode.cs" id="1_48ds2"]
+
+[sub_resource type="PlaceholderMesh" id="PlaceholderMesh_kla4g"]
+
+[resource]
+resource_local_to_scene = true
+script = ExtResource("1_48ds2")
+corners = "00000000"
+mesh = SubResource("PlaceholderMesh_kla4g")
