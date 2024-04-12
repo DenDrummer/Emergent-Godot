@@ -266,7 +266,13 @@ public partial class TerrainGenerator : Node3D
         for (int i = 0; i < Mathf.Min(initialCells, cellsPerTick); i++)
         {
             initialCells--;
-            GenerateTerrain();
+            if (i % 3 == 0)
+            {
+                GenerateTerrain();
+            } else
+            {
+                GenerateTerrain(0, 0, 0);
+            }
         }
     }
 
