@@ -79,11 +79,11 @@ public partial class TerrainGenerator : Node3D
         List<TerrainNode> spawnNodes = new List<TerrainNode>(nodes)
             .Where(n =>
             {
-                return !n.corners.StartsWith("0000")
-                || n.corners[4] == '0'
-                || n.corners[5] == '0'
-                || n.corners[6] == '0'
-                || n.corners[7] == '0';
+                return n.corners.StartsWith("0000")
+                && n.corners[4] != '0'
+                && n.corners[5] != '0'
+                && n.corners[6] != '0'
+                && n.corners[7] != '0';
             })
             .ToList();
 

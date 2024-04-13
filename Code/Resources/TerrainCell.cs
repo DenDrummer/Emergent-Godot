@@ -119,7 +119,7 @@ public partial class TerrainCell : Resource
             if (nodes[0].mesh != null)
             {
                 GD.Print($"placing {nodes[0].corners} at ({z * scale},{y * scale},{-x * scale})");
-                GD.Print($"mesh: {nodes[0].mesh.ResourcePath}");
+                //GD.Print($"mesh: {nodes[0].mesh.ResourcePath}");
                 MeshInstance3D meshInstance = new MeshInstance3D();
                 meshInstance.Mesh = nodes[0].mesh;
                 meshInstance.Position = new Vector3(z * scale, y * scale, -x * scale);

@@ -1,0 +1,10 @@
+[gd_resource type="Resource" load_steps=3 format=3]
+
+[ext_resource type="ArrayMesh" uid="uid://5osgf1ne6dkm" path="res://Mesh/Marching Cubes/DebugMeshes/009-debug.obj" id="1_aadll"]
+[ext_resource type="Script" path="res://Code/Resources/TerrainNode.cs" id="1_jn0a7"]
+
+[resource]
+resource_local_to_scene = true
+script = ExtResource("1_jn0a7")
+corners = "00001001"
+mesh = ExtResource("1_aadll")

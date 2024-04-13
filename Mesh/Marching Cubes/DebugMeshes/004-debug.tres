@@ -1,4 +1,4 @@
-[gd_resource type="Resource" load_steps=3 format=3 uid="uid://yseg6lf72wje"]
+[gd_resource type="Resource" load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://Code/Resources/TerrainNode.cs" id="1_c1243"]
 [ext_resource type="ArrayMesh" uid="uid://dscd8y24p4hv8" path="res://Mesh/Marching Cubes/DebugMeshes/004-debug.obj" id="1_d1eop"]
