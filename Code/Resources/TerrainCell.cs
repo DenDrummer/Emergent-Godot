@@ -2,6 +2,7 @@ using Godot;
 using Godot.Collections;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 public partial class TerrainCell : Resource
 {
@@ -12,7 +13,7 @@ public partial class TerrainCell : Resource
     public short propagationDepth = short.MaxValue;
     private Node3D scene;
 
-    public TerrainCell(short x, short y, short z, short scale, List<TerrainNode> nodes, Node3D scene)
+    public TerrainCell(short x, short y, short z, short scale, IEnumerable<TerrainNode> nodes, Node3D scene)
     {
         this.x = x;
         this.y = y;
@@ -53,6 +54,28 @@ public partial class TerrainCell : Resource
             return;
         }
 
+        CollapsedTo(node);
+    }
+
+    public void CollapseTo(IEnumerable<TerrainNode> collapsionNodes)
+    {
+        collapsionNodes = collapsionNodes.Where(n => nodes.Contains(n)).ToList();
+
+        int nodeCount = collapsionNodes.Count();
+
+        if (nodeCount == 0)
+        {
+            GD.PrintErr($"No valid node for ({x};{y};{z}) in list of collapsion nodes");
+        }
+
+        Random random = new Random();
+        int randomIndex = random.Next(nodeCount);
+
+        CollapsedTo(collapsionNodes.ElementAt(randomIndex));
+    }
+
+    private void CollapsedTo(TerrainNode node)
+    {
         nodes.RemoveAll(n =>
         {
             return n.corners != node.corners;

@@ -2,41 +2,10 @@ using Godot;
 using Godot.Collections;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Text;
 
 public partial class TerrainGenerator : Node3D
 {
-    private static Array<TerrainNode> DefaultNodes()
-    {
-        Array<TerrainNode> defaultNodes = new Array<TerrainNode>();
-
-        int helper;
-        string corners;
-        char[] reversed;
-
-        for (int i = 0; i < 256; i++)
-        {
-            helper = i;
-            corners = "";
-
-            for (int j = 0; j < 8; j++)
-            {
-                corners += helper % 2;
-                helper /= 2;
-            }
-            reversed = corners.ToCharArray();
-
-            System.Array.Reverse(reversed);
-
-            corners = new string(reversed);
-
-            defaultNodes.Add(new TerrainNode(corners, new PlaceholderMesh()));
-        }
-
-        return defaultNodes;
-    }
 
     [Export]
     public short MAX_PROPAGATIONS = 4;
@@ -53,7 +22,7 @@ public partial class TerrainGenerator : Node3D
     public short gridScale = 2;
 
     [Export]
-    private Array<TerrainNode> newNodeList = DefaultNodes();
+    private Array<TerrainNode> newNodeList = new Array<TerrainNode>();
 
     List<TerrainNode> nodes = new List<TerrainNode>();
     List<TerrainCell> cells = new List<TerrainCell>();
@@ -103,51 +72,60 @@ public partial class TerrainGenerator : Node3D
     {
         TerrainCell spawnCell = GetCell(0, 0, 0);
         // x0 y0 z0 is always flat ground as it functions as the spawn
-        bool validSpawn = false;
+        //bool validSpawn = false;
         TerrainNode spawnNode = null;
         Random random = new Random();
 
-        List<TerrainNode> spawnNodes = new List<TerrainNode>(nodes);
-        // TODO: filter on spawnNodes and then choose random, making while obsolete
-        // .where ? (LINQ)
-
-        spawnNodes.RemoveAll(sn =>
-        {
-            return !sn.corners.StartsWith("0000")
-            || sn.corners[4] == '0'
-            || sn.corners[5] == '0'
-            || sn.corners[6] == '0'
-            || sn.corners[7] == '0';
-        });
-
-        while (!validSpawn && spawnNodes.Count > 0)
-        {
-            validSpawn = true;
-            spawnNode = spawnNodes[random.Next(spawnNodes.Count)];
-
-            if (!spawnNode.corners.StartsWith("0000") ||
-                spawnNode.corners[4] == '0' ||
-                spawnNode.corners[5] == '0' ||
-                spawnNode.corners[6] == '0' ||
-                spawnNode.corners[7] == '0')
+        List<TerrainNode> spawnNodes = new List<TerrainNode>(nodes)
+            .Where(n =>
             {
-                validSpawn = false;
-            }
+                return !n.corners.StartsWith("0000")
+                || n.corners[4] == '0'
+                || n.corners[5] == '0'
+                || n.corners[6] == '0'
+                || n.corners[7] == '0';
+            })
+            .ToList();
 
-            if (!validSpawn)
-            {
-                // remove invalid node so we don't have to check for it again
-                spawnNodes.Remove(spawnNode);
-            }
-        }
+        // now redundant?
+        //spawnNodes.RemoveAll(sn =>
+        //{
+        //    return !sn.corners.StartsWith("0000")
+        //    || sn.corners[4] == '0'
+        //    || sn.corners[5] == '0'
+        //    || sn.corners[6] == '0'
+        //    || sn.corners[7] == '0';
+        //});
+        //
+        //while (!validSpawn && spawnNodes.Count > 0)
+        //{
+        //    validSpawn = true;
+        //    spawnNode = spawnNodes[random.Next(spawnNodes.Count)];
+        //
+        //    if (!spawnNode.corners.StartsWith("0000") ||
+        //        spawnNode.corners[4] == '0' ||
+        //        spawnNode.corners[5] == '0' ||
+        //        spawnNode.corners[6] == '0' ||
+        //        spawnNode.corners[7] == '0')
+        //    {
+        //        validSpawn = false;
+        //    }
+        //
+        //    if (!validSpawn)
+        //    {
+        //        // remove invalid node so we don't have to check for it again
+        //        spawnNodes.Remove(spawnNode);
+        //    }
+        //}
 
-        if (!validSpawn)
+        //if (!validSpawn)
+        if (spawnNodes.Count == 0)
         {
             GD.PrintErr("No valid spawn found");
             return;
         }
 
-        spawnCell.CollapseTo(spawnNode);
+        spawnCell.CollapseTo(spawnNodes);
         PropagateChanges(spawnCell);
     }
 
