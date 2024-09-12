@@ -7,13 +7,14 @@ using System.Linq;
 public partial class TerrainCell : Resource
 {
     // global position in grid
-    public readonly short x, y, z, scale;
+    public readonly short x, y, z;
+    public readonly ushort scale;
     public bool collapsed;
     public List<TerrainNode> nodes;
     public short propagationDepth = short.MaxValue;
     private Node3D scene;
 
-    public TerrainCell(short x, short y, short z, short scale, IEnumerable<TerrainNode> nodes, Node3D scene)
+    public TerrainCell(short x, short y, short z, ushort scale, IEnumerable<TerrainNode> nodes, Node3D scene)
     {
         this.x = x;
         this.y = y;
@@ -118,7 +119,7 @@ public partial class TerrainCell : Resource
         {
             if (nodes[0].mesh != null)
             {
-                GD.Print($"placing {nodes[0].corners} at ({z * scale},{y * scale},{-x * scale})");
+                //GD.Print($"placing {nodes[0].corners} at ({z * scale},{y * scale},{-x * scale})");
                 //GD.Print($"mesh: {nodes[0].mesh.ResourcePath}");
                 MeshInstance3D meshInstance = new MeshInstance3D();
                 meshInstance.Mesh = nodes[0].mesh;

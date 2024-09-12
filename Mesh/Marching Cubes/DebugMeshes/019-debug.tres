@@ -1,0 +1,8 @@
+[gd_resource type="Resource" load_steps=2 format=3 uid="uid://1b4x6j7ebxni"]
+
+[ext_resource type="Script" path="res://Code/Resources/TerrainNode.cs" id="1_1bvts"]
+
+[resource]
+resource_local_to_scene = true
+script = ExtResource("1_1bvts")
+corners = "00010011"

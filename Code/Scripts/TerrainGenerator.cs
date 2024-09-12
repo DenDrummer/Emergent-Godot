@@ -8,18 +8,18 @@ public partial class TerrainGenerator : Node3D
 {
 
     [Export]
-    public short MAX_PROPAGATIONS = 4;
+    public byte MAX_PROPAGATIONS = 4;
     // TODO: if possible, export to editor as a single list/array/...
     [Export]
     public string[] cornerValues;
     [Export]
     public Mesh[] meshes;
     [Export]
-    public short initialCells = 10;
+    public ushort initialCells = ushort.MaxValue;
     [Export]
-    public short cellsPerTick = 10;
+    public byte cellsPerTick = 10;
     [Export]
-    public short gridScale = 2;
+    public ushort gridScale = 2;
 
     [Export]
     private Array<TerrainNode> newNodeList = new Array<TerrainNode>();
@@ -52,6 +52,10 @@ public partial class TerrainGenerator : Node3D
             {
                 GenerateTerrain(0, 0, 0);
             }
+            if (initialCells==0)
+            {
+                GD.Print("InitialCells cells generated");
+            }
         }
     }
 
@@ -73,7 +77,7 @@ public partial class TerrainGenerator : Node3D
         TerrainCell spawnCell = GetCell(0, 0, 0);
         // x0 y0 z0 is always flat ground as it functions as the spawn
         //bool validSpawn = false;
-        TerrainNode spawnNode = null;
+        //TerrainNode spawnNode = null;
         Random random = new Random();
 
         List<TerrainNode> spawnNodes = new List<TerrainNode>(nodes)
